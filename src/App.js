@@ -4,7 +4,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import AppRoutes from './routes';
 import Sidebar from './components/Sidebar';
 import styled from 'styled-components';
-
 const Layout = styled.div`
   display: flex;
 `;
@@ -23,7 +22,6 @@ const Content = styled.div`
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   return (
     <Router>
       <Layout>
