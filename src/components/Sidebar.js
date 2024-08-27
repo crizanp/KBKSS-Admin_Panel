@@ -1,4 +1,3 @@
-// src/components/Sidebar.js
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -19,6 +18,10 @@ const SidebarContainer = styled.div`
   padding: ${(props) => (props.isOpen ? '20px 10px' : '15px 5px')};
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
   z-index: 100; /* Ensure the sidebar is above other content */
+
+  @media (max-width: 768px) {
+    width: ${(props) => (props.isOpen ? '150px' : '50px')};
+  }
 `;
 
 const SidebarToggle = styled.div`
@@ -78,7 +81,8 @@ const Logo = styled.div`
 `;
 
 function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true);
+  // Set the sidebar to be closed by default
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
