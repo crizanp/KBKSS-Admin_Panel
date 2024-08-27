@@ -6,12 +6,16 @@ const Container = styled.div`
   padding: 20px;
   background-color: #f4f4f4;
   min-height: 100vh;
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
 `;
 
 const Title = styled.h1`
   color: #2c3e50;
   font-size: 24px;
   font-weight: bold;
+  margin-bottom: 20px;
 `;
 
 const TaskTable = styled.table`
@@ -20,6 +24,8 @@ const TaskTable = styled.table`
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
 `;
 
 const Thead = styled.thead`
@@ -42,15 +48,15 @@ const Tbody = styled.tbody`
 const Td = styled.td`
   padding: 15px;
   vertical-align: middle;
+  word-break: break-word; /* Ensures long words break to fit */
 `;
 
 const Button = styled.button`
-  padding: 5px 10px;
-  margin-right: 5px;
+  padding: 8px 12px;
   background-color: #2980b9;
   color: white;
   border: none;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
 
   &:hover {
@@ -79,8 +85,9 @@ const ModalContent = styled.div`
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 500px;
-  max-width: 80%;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const ModalHeader = styled.div`
@@ -145,6 +152,19 @@ const ActionButton = styled(Button)`
     background-color: #c0392b;
   }
 `;
+
+const LinkPreview = styled.a`
+  color: #2980b9;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const truncateLink = (link) => {
+  if (!link) return '';
+  return link.length > 30 ? `${link.substring(0, 27)}...` : link;
+};
 
 function IGHAirdropTasks() {
   const [tasks, setTasks] = useState([]);
@@ -277,9 +297,9 @@ function IGHAirdropTasks() {
               <Td>{task.name}</Td>
               <Td>{task.description}</Td>
               <Td>
-                <a href={task.link} target="_blank" rel="noopener noreferrer">
-                  {task.link}
-                </a>
+                <LinkPreview href={task.link} target="_blank" rel="noopener noreferrer">
+                  {truncateLink(task.link)}
+                </LinkPreview>
               </Td>
               <Td>{task.points}</Td>
               <Td>{task.category}</Td>

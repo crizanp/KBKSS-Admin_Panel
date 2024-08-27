@@ -1,4 +1,3 @@
-// src/routes.js
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
@@ -9,7 +8,7 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login"; // Import the Login page
 import PrivateRoute from "./components/PrivateRoute"; // Import the PrivateRoute component
 import IGHAirdropTasks from './pages/IGH_AirdropTasks';
-
+import QuizManagement from "./pages/QuizManagement";
 
 function AppRoutes() {
   return (
@@ -50,13 +49,27 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
-      <Route path="/igh-airdrop" element={<IGHAirdropTasks />} />
-
+      <Route
+        path="/igh-airdrop"
+        element={
+          <PrivateRoute>
+            <IGHAirdropTasks />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/settings"
         element={
           <PrivateRoute>
             <Settings />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/quiz-management"
+        element={
+          <PrivateRoute>
+            <QuizManagement />
           </PrivateRoute>
         }
       />

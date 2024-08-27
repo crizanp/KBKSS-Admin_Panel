@@ -4,12 +4,13 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import AppRoutes from './routes';
 import Sidebar from './components/Sidebar';
 import styled from 'styled-components';
+
 const Layout = styled.div`
   display: flex;
 `;
 
 const Content = styled.div`
-  margin-left: ${(props) => (props.isOpen ? '250px' : '80px')};
+  margin-left: ${(props) => (props.isOpen ? '250px' : '100px')};
   padding: 20px;
   width: ${(props) => (props.isOpen ? 'calc(100% - 250px)' : 'calc(100% - 60px)')};
   transition: margin-left 0.3s, width 0.3s;
