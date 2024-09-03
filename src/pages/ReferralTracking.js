@@ -47,6 +47,10 @@ const Td = styled.td`
   vertical-align: middle;
 `;
 
+const NoUsername = styled.span`
+  color: red;
+`;
+
 function ReferralTracking() {
   const [referrals, setReferrals] = useState([]);
 
@@ -81,9 +85,21 @@ function ReferralTracking() {
           {referrals.map((referral, index) => (
             <tr key={index}>
               <Td>{referral.referrerID}</Td>
-              <Td>{referral.referrerUsername}</Td>
+              <Td>
+                {referral.referrerUsername ? (
+                  referral.referrerUsername
+                ) : (
+                  <NoUsername>No Username</NoUsername>
+                )}
+              </Td>
               <Td>{referral.referredID}</Td>
-              <Td>{referral.referredUsername}</Td>
+              <Td>
+                {referral.referredUsername ? (
+                  referral.referredUsername
+                ) : (
+                  <NoUsername>No Username</NoUsername>
+                )}
+              </Td>
               <Td>{referral.pointsAwarded}</Td>
               <Td>{new Date(referral.createdAt).toLocaleDateString()}</Td>
             </tr>
