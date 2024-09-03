@@ -5,10 +5,12 @@ import AirdropList from "./pages/AirdropList";
 import TaskList from "./pages/TaskList";
 import UserAnalytics from "./pages/UserAnalytics";
 import Settings from "./pages/Settings";
-import Login from "./pages/Login"; // Import the Login page
-import PrivateRoute from "./components/PrivateRoute"; // Import the PrivateRoute component
+import Login from "./pages/Login";
+import PrivateRoute from "./components/PrivateRoute";
 import IGHAirdropTasks from './pages/IGH_AirdropTasks';
 import QuizManagement from "./pages/QuizManagement";
+import ReferralTracking from "./pages/ReferralTracking"; 
+import NotFound from "./pages/NotFound"; 
 
 function AppRoutes() {
   return (
@@ -73,6 +75,17 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
+      <Route
+        path="/referrals"
+        element={
+          <PrivateRoute>
+            <ReferralTracking />
+          </PrivateRoute>
+        }
+      />
+
+      {/* Catch-all Route for Undefined Paths */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
