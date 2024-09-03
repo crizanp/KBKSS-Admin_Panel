@@ -45,7 +45,7 @@ const CategoryManagement = ({ categories, setCategories }) => {
 
   const handleAddCategory = async () => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/categories`, { name: newCategory });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/category/categories`, { name: newCategory });
       setCategories([...categories, response.data]);
       setNewCategory('');
     } catch (error) {

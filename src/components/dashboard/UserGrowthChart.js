@@ -28,7 +28,7 @@ function UserGrowthChart() {
   useEffect(() => {
     const fetchUserGrowthData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-growth`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/chartMetric/user-growth`);
         const { dates, userCounts } = response.data;
 
         setChartData({

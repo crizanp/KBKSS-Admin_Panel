@@ -76,6 +76,15 @@ const CloseButton = styled.button`
   }
 `;
 
+const StyledLink = styled.a`
+  color: #007bff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const customModalStyles = {
   content: {
     top: '50%',
@@ -116,7 +125,7 @@ const UserAnalytics = () => {
         const [userResponse, taskResponse, quizResponse] = await Promise.all([
           axios.get(`${process.env.REACT_APP_API_URL}/user-info/fetchdata`),
           axios.get(`${process.env.REACT_APP_API_URL}/igh-airdrop-tasks`),
-          axios.get(`${process.env.REACT_APP_API_URL}/quizzes/questions`)
+          axios.get(`${process.env.REACT_APP_API_URL}/quiz/quizzes/questions`)
         ]);
 
         const tasks = taskResponse.data.reduce((acc, task) => {
@@ -153,7 +162,7 @@ const UserAnalytics = () => {
     if (searchQuery) {
       filtered = filtered.filter(user => 
         user.userID.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        'demousername'.toLowerCase().includes(searchQuery.toLowerCase())
+        (user.username && user.username.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
 
@@ -248,7 +257,15 @@ const UserAnalytics = () => {
 
             return (
               <tr key={user.userID} onClick={() => handleUserClick(user)}>
-                <Td>demousername</Td> {/* Static/dummy username */}
+                <Td>
+                  {user.username ? (
+                    <StyledLink href={`https://t.me/${user.username}`} target="_blank" rel="noopener noreferrer">
+                      {user.username}
+                    </StyledLink>
+                  ) : (
+                    'No Username'
+                  )}
+                </Td>
                 <Td>{user.userID}</Td>
                 <Td>{Math.floor(user.points)}</Td> 
                 <Td>{user.tasksCompleted.length}</Td>

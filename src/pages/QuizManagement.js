@@ -33,7 +33,7 @@ const QuizManagement = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/categories`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/category/categories`);
       setCategories(response.data);
     } catch (error) {
       setError('Error fetching categories');
@@ -42,7 +42,7 @@ const QuizManagement = () => {
 
   const fetchQuizzes = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/quizzes/questions`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/quiz/quizzes/questions`);
       setQuizzes(response.data);
     } catch (error) {
       setError('Error fetching quizzes');

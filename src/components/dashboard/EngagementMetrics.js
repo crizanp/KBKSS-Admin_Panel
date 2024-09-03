@@ -101,7 +101,7 @@ function EngagementMetrics() {
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/engagement-metrics`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/chartMetric/engagement-metrics`);
         setMetrics(response.data);
       } catch (error) {
         console.error('Error fetching engagement metrics:', error);

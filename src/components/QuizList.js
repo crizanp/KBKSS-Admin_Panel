@@ -78,7 +78,7 @@ const QuizList = ({ quizzes, setQuizzes, onEdit, categories, setSelectedCategory
 
   const handleDeleteQuiz = async () => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/quizzes/${quizToDelete}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/quiz/quizzes/${quizToDelete}`);
       setQuizzes(quizzes.filter((quiz) => quiz._id !== quizToDelete));
       setShowModal(false);
       setQuizToDelete(null);

@@ -115,11 +115,11 @@ const QuizForm = ({ categories, quizzes, setQuizzes, editingQuiz, setEditingQuiz
 
     try {
       if (editingQuiz) {
-        const response = await axios.put(`${process.env.REACT_APP_API_URL}/quizzes/${editingQuiz._id}`, newQuiz);
+        const response = await axios.put(`${process.env.REACT_APP_API_URL}/quiz/quizzes/${editingQuiz._id}`, newQuiz);
         setQuizzes(quizzes.map(quiz => quiz._id === editingQuiz._id ? response.data : quiz));
         setEditingQuiz(null);
       } else {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/quizzes`, newQuiz);
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/quiz/quizzes`, newQuiz);
         setQuizzes([...quizzes, response.data]);
       }
       
