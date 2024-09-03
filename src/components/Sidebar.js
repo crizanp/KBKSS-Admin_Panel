@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { FaBars, FaHome, FaCoins, FaTasks, FaUsers, FaCog, FaQuestion } from 'react-icons/fa';
+import { FaBars, FaHome, FaCoins, FaTasks, FaUsers, FaCog, FaQuestion, FaGift, FaExchangeAlt } from 'react-icons/fa';
 
 const SidebarContainer = styled.div`
   width: ${(props) => (props.isOpen ? '200px' : '60px')};
@@ -17,7 +17,7 @@ const SidebarContainer = styled.div`
   transition: width 0.3s ease, padding 0.3s ease;
   padding: ${(props) => (props.isOpen ? '20px 10px' : '15px 5px')};
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-  z-index: 100; /* Ensure the sidebar is above other content */
+  z-index: 100;
 
   @media (max-width: 768px) {
     width: ${(props) => (props.isOpen ? '150px' : '50px')};
@@ -47,8 +47,8 @@ const SidebarItem = styled(NavLink)`
   font-size: ${(props) => (props.isOpen ? '16px' : '20px')};
   border-radius: 5px;
   transition: background 0.3s, padding 0.3s, font-size 0.3s;
-  width: 100%; /* Ensure the item takes the full width */
-  box-sizing: border-box; /* Include padding and border in the width calculation */
+  width: 100%;
+  box-sizing: border-box;
 
   &.active {
     background-color: #2980b9;
@@ -81,7 +81,6 @@ const Logo = styled.div`
 `;
 
 function Sidebar() {
-  // Set the sidebar to be closed by default
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -98,7 +97,7 @@ function Sidebar() {
         <FaHome /> <span>Dashboard</span>
       </SidebarItem>
       <SidebarItem to="/airdrops" isOpen={isOpen}>
-        <FaCoins /> <span>Airdrops</span>
+        <FaGift /> <span>Airdrops</span>
       </SidebarItem>
       <SidebarItem to="/tasks" isOpen={isOpen}>
         <FaTasks /> <span>Tasks</span>
@@ -107,10 +106,13 @@ function Sidebar() {
         <FaUsers /> <span>Users</span>
       </SidebarItem>
       <SidebarItem to="/igh-airdrop" isOpen={isOpen}>
-        <FaTasks /> <span>IGH Airdrop</span>
+        <FaExchangeAlt /> <span>IGH Airdrop</span>
       </SidebarItem>
       <SidebarItem to="/quiz-management" isOpen={isOpen}>
         <FaQuestion /> <span>Quiz Management</span>
+      </SidebarItem>
+      <SidebarItem to="/referrals" isOpen={isOpen}>
+        <FaCoins /> <span>Referrals</span>
       </SidebarItem>
       <SidebarItem to="/settings" isOpen={isOpen}>
         <FaCog /> <span>Settings</span>
