@@ -394,7 +394,7 @@ function IGHAirdropTasks() {
                 <option value="Special">Special</option>
                 <option value="Daily">Daily</option>
                 <option value="Lists">Lists</option>
-                <option value="Lists">Extra</option>
+                <option value="Extra">Extra</option>
 
               </Select>
               <Label>Proof Placeholder</Label>
