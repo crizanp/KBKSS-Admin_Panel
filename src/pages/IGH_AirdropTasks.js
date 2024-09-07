@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import axios from "axios";
 
 const Container = styled.div`
   padding: 20px;
@@ -156,13 +156,14 @@ const ActionButton = styled(Button)`
 const LinkPreview = styled.a`
   color: #2980b9;
   text-decoration: none;
+
   &:hover {
     text-decoration: underline;
   }
 `;
 
 const truncateLink = (link) => {
-  if (!link) return '';
+  if (!link) return "";
   return link.length > 30 ? `${link.substring(0, 27)}...` : link;
 };
 
@@ -172,21 +173,24 @@ function IGHAirdropTasks() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentTaskId, setCurrentTaskId] = useState(null);
   const [newTask, setNewTask] = useState({
-    name: '',
-    description: '',
-    link: '',
-    points: '',
-    proofPlaceholder: '',
-    category: 'Special',
+    name: "",
+    description: "",
+    link: "",
+    points: "",
+    proofPlaceholder: "",
+    category: "Special",
+    logo: "", // Add this line
   });
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/igh-airdrop-tasks`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/igh-airdrop-tasks`
+        );
         setTasks(response.data);
       } catch (error) {
-        console.error('Error fetching IGH tasks:', error);
+        console.error("Error fetching IGH tasks:", error);
       }
     };
 
@@ -205,12 +209,13 @@ function IGHAirdropTasks() {
     setIsEditMode(false);
     setIsModalOpen(true);
     setNewTask({
-      name: '',
-      description: '',
-      link: '',
-      points: '',
-      proofPlaceholder: '',
-      category: 'Special',
+      name: "",
+      description: "",
+      link: "",
+      points: "",
+      proofPlaceholder: "",
+      category: "Special",
+      logo: "", // Reset logo field
     });
   };
 
@@ -224,6 +229,7 @@ function IGHAirdropTasks() {
       points: task.points,
       proofPlaceholder: task.proofPlaceholder,
       category: task.category,
+      logo: task.logo || '',
     });
     setIsModalOpen(true);
   };
@@ -238,39 +244,52 @@ function IGHAirdropTasks() {
     if (isEditMode) {
       // Update existing task
       try {
-        const response = await axios.put(`${process.env.REACT_APP_API_URL}/igh-airdrop-tasks/${currentTaskId}`, newTask);
-        setTasks(tasks.map((task) => (task._id === currentTaskId ? response.data : task)));
+        const response = await axios.put(
+          `${process.env.REACT_APP_API_URL}/igh-airdrop-tasks/${currentTaskId}`,
+          newTask
+        );
+        setTasks(
+          tasks.map((task) =>
+            task._id === currentTaskId ? response.data : task
+          )
+        );
       } catch (error) {
-        console.error('Error updating task:', error);
+        console.error("Error updating task:", error);
       }
     } else {
       // Create new task
       try {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/igh-airdrop-tasks`, newTask);
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/igh-airdrop-tasks`,
+          newTask
+        );
         setTasks([...tasks, response.data]);
       } catch (error) {
-        console.error('Error creating task:', error);
+        console.error("Error creating task:", error);
       }
     }
 
     setIsModalOpen(false);
     setNewTask({
-      name: '',
-      description: '',
-      link: '',
-      points: '',
-      proofPlaceholder: '',
-      category: 'Special',
+      name: "",
+      description: "",
+      link: "",
+      points: "",
+      proofPlaceholder: "",
+      category: "Special",
+      logo: "", // Reset after submission
     });
   };
 
   const handleDeleteTask = async (taskId) => {
-    if (window.confirm('Are you sure you want to delete this task?')) {
+    if (window.confirm("Are you sure you want to delete this task?")) {
       try {
-        await axios.delete(`${process.env.REACT_APP_API_URL}/igh-airdrop-tasks/${taskId}`);
+        await axios.delete(
+          `${process.env.REACT_APP_API_URL}/igh-airdrop-tasks/${taskId}`
+        );
         setTasks(tasks.filter((task) => task._id !== taskId));
       } catch (error) {
-        console.error('Error deleting task:', error);
+        console.error("Error deleting task:", error);
       }
     }
   };
@@ -278,7 +297,9 @@ function IGHAirdropTasks() {
   return (
     <Container>
       <Title>IGH Airdrop Tasks</Title>
-      <CreateTaskButton onClick={handleCreateTask}>Create New Task</CreateTaskButton>
+      <CreateTaskButton onClick={handleCreateTask}>
+        Create New Task
+      </CreateTaskButton>
       <TaskTable>
         <Thead>
           <tr>
@@ -288,6 +309,7 @@ function IGHAirdropTasks() {
             <Th>Points</Th>
             <Th>Category</Th>
             <Th>Proof Placeholder</Th>
+            <Th>Logo</Th>
             <Th>Actions</Th>
           </tr>
         </Thead>
@@ -297,7 +319,11 @@ function IGHAirdropTasks() {
               <Td>{task.name}</Td>
               <Td>{task.description}</Td>
               <Td>
-                <LinkPreview href={task.link} target="_blank" rel="noopener noreferrer">
+                <LinkPreview
+                  href={task.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {truncateLink(task.link)}
                 </LinkPreview>
               </Td>
@@ -305,8 +331,13 @@ function IGHAirdropTasks() {
               <Td>{task.category}</Td>
               <Td>{task.proofPlaceholder}</Td>
               <Td>
+                {task.logo ? <img src={task.logo} alt="Logo" style={{ width: '50px', height: '50px' }} /> : 'No logo'}
+              </Td>
+              <Td>
                 <Button onClick={() => handleEditTask(task)}>Edit</Button>
-                <ActionButton onClick={() => handleDeleteTask(task._id)}>Delete</ActionButton>
+                <ActionButton onClick={() => handleDeleteTask(task._id)}>
+                  Delete
+                </ActionButton>
               </Td>
             </tr>
           ))}
@@ -317,7 +348,7 @@ function IGHAirdropTasks() {
         <ModalOverlay>
           <ModalContent>
             <ModalHeader>
-              <h2>{isEditMode ? 'Edit Task' : 'Create New Task'}</h2>
+              <h2>{isEditMode ? "Edit Task" : "Create New Task"}</h2>
               <Button onClick={handleCloseModal}>Close</Button>
             </ModalHeader>
             <form onSubmit={handleSubmitTask}>
@@ -372,7 +403,17 @@ function IGHAirdropTasks() {
                 onChange={handleInputChange}
                 required
               />
-              <Button type="submit">{isEditMode ? 'Update Task' : 'Create Task'}</Button>
+              <Label>Logo URL</Label>
+              <Input
+                type="url"
+                name="logo"
+                value={newTask.logo}
+                onChange={handleInputChange}
+              />
+
+              <Button type="submit">
+                {isEditMode ? "Update Task" : "Create Task"}
+              </Button>
             </form>
           </ModalContent>
         </ModalOverlay>
