@@ -11,6 +11,7 @@ import IGHAirdropTasks from './pages/IGH_AirdropTasks';
 import QuizManagement from "./pages/QuizManagement";
 import ReferralTracking from "./pages/ReferralTracking"; 
 import NotFound from "./pages/NotFound"; 
+import AdminTreasureHuntSettings from "./pages/TresureHunt";
 
 function AppRoutes() {
   return (
@@ -80,6 +81,14 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <ReferralTracking />
+          </PrivateRoute>
+        }
+      />
+       <Route
+        path="/tresure-hunt"
+        element={
+          <PrivateRoute>
+            <AdminTreasureHuntSettings />
           </PrivateRoute>
         }
       />
