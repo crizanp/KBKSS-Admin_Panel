@@ -37,16 +37,17 @@ function AirdropRow({ airdrop }) {
       <Td>
         <Description>{airdrop.description}</Description>
       </Td>
-      <Td>{airdrop.reward}</Td>
-      <Td>{airdrop.participants}</Td>
-      <Td>{airdrop.winners}</Td>
-      <Td>{airdrop.startDate}</Td>
-      <Td>{airdrop.endDate}</Td>
       <Td>
         <a href={airdrop.airdropLink} target="_blank" rel="noopener noreferrer">
           {airdrop.airdropLink}
         </a>
       </Td>
+      <Td>{airdrop.reward}</Td>
+      <Td>{airdrop.participants}</Td>
+      <Td>{airdrop.winners}</Td>
+      <Td>{airdrop.startDate}</Td>
+      <Td>{airdrop.endDate}</Td>
+      
       <Td>{airdrop.status}</Td>
 
       <Td>
