@@ -12,6 +12,7 @@ import QuizManagement from "./pages/QuizManagement";
 import ReferralTracking from "./pages/ReferralTracking"; 
 import NotFound from "./pages/NotFound"; 
 import AdminTreasureHuntSettings from "./pages/TresureHunt";
+import EditAirdrop from './pages/EditAirdrop';  // Import EditAirdrop page
 
 function AppRoutes() {
   return (
@@ -36,6 +37,17 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
+      
+      {/* Add Edit Airdrop Route */}
+      <Route
+        path="/airdrops/edit/:id"
+        element={
+          <PrivateRoute>
+            <EditAirdrop />
+          </PrivateRoute>
+        }
+      />
+      
       <Route
         path="/tasks"
         element={
