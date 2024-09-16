@@ -26,6 +26,10 @@ const Description = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
+function formatDate(dateString) {
+  const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString(undefined, dateOptions);
+}
 
 function AirdropRow({ airdrop }) {
   return (
@@ -45,16 +49,15 @@ function AirdropRow({ airdrop }) {
       <Td>{airdrop.reward}</Td>
       <Td>{airdrop.participants}</Td>
       <Td>{airdrop.winners}</Td>
-      <Td>{airdrop.startDate}</Td>
-      <Td>{airdrop.endDate}</Td>
-      
+      <Td>{formatDate(airdrop.startDate)}</Td>
+      <Td>{formatDate(airdrop.endDate)}</Td>
       <Td>{airdrop.status}</Td>
-
       <Td>
-        <AirdropActions airdropId={airdrop.id} />
+        <AirdropActions airdropId={airdrop._id} />
       </Td>
     </Tr>
   );
 }
+
 
 export default AirdropRow;

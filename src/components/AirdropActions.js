@@ -2,6 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
+import axios from 'axios';
 
 const ActionsContainer = styled.div`
   display: flex;
@@ -21,17 +22,26 @@ const IconButton = styled.button`
 `;
 
 function AirdropActions({ airdropId }) {
+  const history = useHistory();
+
   const handleView = () => {
-    alert(`View details of airdrop ${airdropId}`);
+    history.push(`/airdrops/view/${airdropId}`);
   };
 
   const handleEdit = () => {
-    alert(`Edit airdrop ${airdropId}`);
+    history.push(`/airdrops/edit/${airdropId}`);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (window.confirm(`Are you sure you want to delete airdrop ${airdropId}?`)) {
-      alert(`Airdrop ${airdropId} deleted.`);
+      try {
+        await axios.delete(`${process.env.REACT_APP_API_URL}/airdrops/${airdropId}`);
+        alert(`Airdrop ${airdropId} deleted.`);
+        window.location.reload(); // Refresh the list after deletion
+      } catch (error) {
+        console.error('Error deleting airdrop:', error);
+        alert('Failed to delete the airdrop.');
+      }
     }
   };
 
@@ -49,5 +59,4 @@ function AirdropActions({ airdropId }) {
     </ActionsContainer>
   );
 }
-
 export default AirdropActions;
