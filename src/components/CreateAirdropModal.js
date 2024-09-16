@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
+import React, { useState } from "react";
+import styled from "styled-components";
+import axios from "axios";
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -116,14 +116,15 @@ const Button = styled.button`
 
 function CreateAirdropModal({ closeModal }) {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    reward: '',
-    participants: '',
-    winners: '',
-    startDate: '',
-    endDate: '',
-    logo: '',
+    name: "",
+    description: "",
+    reward: "",
+    participants: "",
+    winners: "",
+    startDate: "",
+    endDate: "",
+    logo: "",
+    airdropLink: "", // New field for the airdrop link
   });
 
   const handleChange = (e) => {
@@ -135,17 +136,24 @@ function CreateAirdropModal({ closeModal }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Submitting form data:', formData);
+    console.log("Submitting form data:", formData);
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/airdrops`, formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      alert('Airdrop created successfully!');
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/airdrops`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      alert("Airdrop created successfully!");
       closeModal();
     } catch (error) {
-      console.error('Error creating airdrop:', error.response ? error.response.data : error.message);
+      console.error(
+        "Error creating airdrop:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -188,6 +196,17 @@ function CreateAirdropModal({ closeModal }) {
               onChange={handleChange}
               placeholder="https://example.com/logo.png"
               required
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label>Airdrop Link</Label>
+            <Input
+              type="text"
+              name="airdropLink"
+              value={formData.airdropLink}
+              onChange={handleChange}
+              required
+              placeholder="https://example.com/airdrop"
             />
           </FormGroup>
           <FormGroup>

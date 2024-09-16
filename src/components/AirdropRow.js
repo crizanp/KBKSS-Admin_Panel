@@ -1,7 +1,7 @@
 // src/components/AirdropRow.js
-import React from 'react';
-import styled from 'styled-components';
-import AirdropActions from './AirdropActions';
+import React from "react";
+import styled from "styled-components";
+import AirdropActions from "./AirdropActions";
 
 const Tr = styled.tr`
   &:hover {
@@ -42,7 +42,13 @@ function AirdropRow({ airdrop }) {
       <Td>{airdrop.winners}</Td>
       <Td>{airdrop.startDate}</Td>
       <Td>{airdrop.endDate}</Td>
+      <Td>
+        <a href={airdrop.airdropLink} target="_blank" rel="noopener noreferrer">
+          {airdrop.airdropLink}
+        </a>
+      </Td>
       <Td>{airdrop.status}</Td>
+
       <Td>
         <AirdropActions airdropId={airdrop.id} />
       </Td>

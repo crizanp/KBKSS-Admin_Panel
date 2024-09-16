@@ -50,6 +50,7 @@ function AirdropTable() {
           <Th>Logo</Th>
           <Th>Name</Th>
           <Th>Description</Th>
+          <Th>Airdrop Link</Th>
           <Th>Reward</Th>
           <Th>Participants</Th>
           <Th>Winners</Th>
