@@ -1,8 +1,8 @@
-// src/components/AirdropActions.js
 import React from 'react';
 import styled from 'styled-components';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom'; // Import useHistory
 
 const ActionsContainer = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const IconButton = styled.button`
 `;
 
 function AirdropActions({ airdropId }) {
-  const history = useHistory();
+  const history = useHistory(); // Now useHistory is properly defined
 
   const handleView = () => {
     history.push(`/airdrops/view/${airdropId}`);
@@ -59,4 +59,5 @@ function AirdropActions({ airdropId }) {
     </ActionsContainer>
   );
 }
+
 export default AirdropActions;
