@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom'; // Import useHistory
+import { useNavigate } from 'react-router-dom'; // useNavigate instead of useHistory
 
 const ActionsContainer = styled.div`
   display: flex;
@@ -22,14 +22,14 @@ const IconButton = styled.button`
 `;
 
 function AirdropActions({ airdropId }) {
-  const history = useHistory(); // Now useHistory is properly defined
+  const navigate = useNavigate(); // useNavigate instead of useHistory
 
   const handleView = () => {
-    history.push(`/airdrops/view/${airdropId}`);
+    navigate(`/airdrops/view/${airdropId}`); // navigate replaces history.push
   };
 
   const handleEdit = () => {
-    history.push(`/airdrops/edit/${airdropId}`);
+    navigate(`/airdrops/edit/${airdropId}`); // navigate replaces history.push
   };
 
   const handleDelete = async () => {
