@@ -99,21 +99,21 @@ function Sidebar() {
       <SidebarItem to="/airdrops" isOpen={isOpen}>
         <FaGift /> <span>Airdrops</span>
       </SidebarItem>
-      <SidebarItem to="/tasks" isOpen={isOpen}>
+      {/* <SidebarItem to="/tasks" isOpen={isOpen}>
         <FaTasks /> <span>Tasks</span>
-      </SidebarItem>
+      </SidebarItem> */}
       <SidebarItem to="/users" isOpen={isOpen}>
         <FaUsers /> <span>Users</span>
       </SidebarItem>
       <SidebarItem to="/igh-airdrop" isOpen={isOpen}>
         <FaExchangeAlt /> <span>IGH Airdrop</span>
       </SidebarItem>
-      <SidebarItem to="/tresure-hunt" isOpen={isOpen}>
+      {/* <SidebarItem to="/tresure-hunt" isOpen={isOpen}>
         <FaExchangeAlt /> <span>Tresure Hunt</span>
-      </SidebarItem>
-      <SidebarItem to="/quiz-management" isOpen={isOpen}>
+      </SidebarItem> */}
+      {/* <SidebarItem to="/quiz-management" isOpen={isOpen}>
         <FaQuestion /> <span>Quiz Management</span>
-      </SidebarItem>
+      </SidebarItem> */}
       <SidebarItem to="/referrals" isOpen={isOpen}>
         <FaCoins /> <span>Referrals</span>
       </SidebarItem>
