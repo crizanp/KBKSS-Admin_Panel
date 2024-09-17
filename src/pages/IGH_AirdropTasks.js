@@ -259,22 +259,29 @@ function IGHAirdropTasks() {
           </tr>
         </Thead>
         <Tbody>
-          {tasks.map((task) => (
-            <tr key={task._id}>
-              <Td>{task.name}</Td>
-              <Td>{task.description}</Td>
-              <Td><a href={task.link} target="_blank" rel="noopener noreferrer">{task.link}</a></Td>
-              <Td>{task.points}</Td>
-              <Td>{task.category.name}</Td>
-              <Td>{task.proofPlaceholder}</Td>
-              <Td>{task.logo ? <img src={task.logo} alt="Logo" style={{ width: '50px', height: '50px' }} /> : 'No logo'}</Td>
-              <Td>
-                <Button onClick={() => handleEditTask(task)}>Edit</Button>
-                <ActionButton onClick={() => handleDeleteTask(task._id)}>Delete</ActionButton>
-              </Td>
-            </tr>
-          ))}
-        </Tbody>
+  {tasks.map((task) => (
+    <tr key={task._id}>
+      <Td>{task.name}</Td>
+      <Td>{task.description}</Td>
+      <Td>
+        <a href={task.link} target="_blank" rel="noopener noreferrer">
+          {task.link}
+        </a>
+      </Td>
+      <Td>{task.points}</Td>
+      <Td>{task.category ? task.category.name : "No Category"}</Td> {/* Check if category exists */}
+      <Td>{task.proofPlaceholder}</Td>
+      <Td>
+        {task.logo ? <img src={task.logo} alt="Logo" style={{ width: '50px', height: '50px' }} /> : 'No logo'}
+      </Td>
+      <Td>
+        <Button onClick={() => handleEditTask(task)}>Edit</Button>
+        <ActionButton onClick={() => handleDeleteTask(task._id)}>Delete</ActionButton>
+      </Td>
+    </tr>
+  ))}
+</Tbody>
+
       </TaskTable>
 
       {isModalOpen && (
