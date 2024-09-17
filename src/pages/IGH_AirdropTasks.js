@@ -393,7 +393,7 @@ function IGHAirdropTasks() {
               >
                 <option value="Special">Special</option>
                 <option value="Daily">Daily</option>
-                <option value="Our Ecosystem">Our Ecosystem</option>
+                <option value="Lists">Lists</option>
                 <option value="Extra">Extra</option>
 
               </Select>
