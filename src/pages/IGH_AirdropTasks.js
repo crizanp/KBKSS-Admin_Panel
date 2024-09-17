@@ -75,19 +75,7 @@ const CreateCategoryButton = styled(Button)`
   padding: 10px 20px;
   margin-bottom: 20px;
 `;
-const Select = styled.select`
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 15px;
 
-  &:focus {
-    outline: none;
-    border-color: #2980b9;
-  }
-`;
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -159,6 +147,16 @@ const CategoryItem = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
+const LinkPreview = styled.a`
+  color: #2980b9;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+// Main Component
 function IGHAirdropTasks() {
   const [tasks, setTasks] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -215,7 +213,7 @@ function IGHAirdropTasks() {
       link: "",
       points: "",
       proofPlaceholder: "",
-      category: "Special",
+      category: categories.length ? categories[0]._id : "Special",
       logo: "",
     });
   };
@@ -381,6 +379,7 @@ function IGHAirdropTasks() {
             <Th>Link</Th>
             <Th>Points</Th>
             <Th>Category</Th>
+            <Th>Logo</Th>
             <Th>Actions</Th>
           </tr>
         </Thead>
@@ -390,12 +389,15 @@ function IGHAirdropTasks() {
               <Td>{task.name}</Td>
               <Td>{task.description}</Td>
               <Td>
-                <a href={task.link} target="_blank" rel="noopener noreferrer">
+                <LinkPreview href={task.link} target="_blank" rel="noopener noreferrer">
                   {task.link}
-                </a>
+                </LinkPreview>
               </Td>
               <Td>{task.points}</Td>
-              <Td>{task.category}</Td>
+              <Td>{categories.find((cat) => cat._id === task.category)?.name || "Unknown"}</Td>
+              <Td>
+                {task.logo ? <img src={task.logo} alt="Logo" style={{ width: '50px', height: '50px' }} /> : 'No logo'}
+              </Td>
               <Td>
                 <Button onClick={() => {
                   setCurrentTaskId(task._id);
@@ -448,7 +450,7 @@ function IGHAirdropTasks() {
                 required
               />
               <Label>Category</Label>
-              <Select
+              <select
                 name="category"
                 value={newTask.category}
                 onChange={handleInputChange}
@@ -459,7 +461,30 @@ function IGHAirdropTasks() {
                     {category.name}
                   </option>
                 ))}
-              </Select>
+              </select>
+              <Label>Points</Label>
+              <Input
+                type="number"
+                name="points"
+                value={newTask.points}
+                onChange={handleInputChange}
+                required
+              />
+              <Label>Link</Label>
+              <Input
+                type="url"
+                name="link"
+                value={newTask.link}
+                onChange={handleInputChange}
+                required
+              />
+              <Label>Logo URL</Label>
+              <Input
+                type="url"
+                name="logo"
+                value={newTask.logo}
+                onChange={handleInputChange}
+              />
               <Button type="submit">{isEditMode ? "Update Task" : "Create Task"}</Button>
             </form>
           </ModalContent>
