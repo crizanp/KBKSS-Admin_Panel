@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
+// Styled Components
 const Container = styled.div`
   padding: 20px;
   background-color: #f4f4f4;
@@ -17,6 +18,39 @@ const Title = styled.h1`
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
+`;
+
+const TaskTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+`;
+
+const Thead = styled.thead`
+  background-color: #2c3e50;
+  color: white;
+`;
+
+const Th = styled.th`
+  padding: 15px;
+  text-align: left;
+  font-weight: bold;
+`;
+
+const Tbody = styled.tbody`
+  & > tr:nth-child(even) {
+    background-color: #f4f4f4;
+  }
+`;
+
+const Td = styled.td`
+  padding: 15px;
+  vertical-align: middle;
+  word-break: break-word;
 `;
 
 const Button = styled.button`
@@ -38,8 +72,8 @@ const CreateTaskButton = styled(Button)`
 `;
 
 const CreateCategoryButton = styled(Button)`
-  margin-left: 20px;
   padding: 10px 20px;
+  margin-bottom: 20px;
 `;
 
 const ModalOverlay = styled.div`
@@ -90,20 +124,6 @@ const Input = styled.input`
   }
 `;
 
-const Select = styled.select`
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 15px;
-
-  &:focus {
-    outline: none;
-    border-color: #2980b9;
-  }
-`;
-
 const ActionButton = styled(Button)`
   background-color: #e74c3c;
 
@@ -139,37 +159,32 @@ function IGHAirdropTasks() {
     link: "",
     points: "",
     proofPlaceholder: "",
-    category: "",
+    category: "Special",
     logo: "",
   });
-
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState({ name: "" });
   const [editCategoryId, setEditCategoryId] = useState(null);
 
+  // Fetch tasks and categories on load
   useEffect(() => {
-    const fetchTasks = async () => {
+    const fetchTasksAndCategories = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/igh-airdrop-tasks`);
-        setTasks(response.data);
+        const [taskResponse, categoryResponse] = await Promise.all([
+          axios.get(`${process.env.REACT_APP_API_URL}/igh-airdrop-tasks`),
+          axios.get(`${process.env.REACT_APP_API_URL}/igh-task-category`),
+        ]);
+        setTasks(taskResponse.data);
+        setCategories(categoryResponse.data);
       } catch (error) {
-        console.error("Error fetching IGH tasks:", error);
+        console.error("Error fetching tasks and categories:", error);
       }
     };
 
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/igh-task-category`);
-        setCategories(response.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    fetchTasks();
-    fetchCategories();
+    fetchTasksAndCategories();
   }, []);
 
+  // Handle form input changes for task creation/editing
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewTask((prevTask) => ({
@@ -178,6 +193,7 @@ function IGHAirdropTasks() {
     }));
   };
 
+  // Handle task creation
   const handleCreateTask = () => {
     setIsEditMode(false);
     setIsModalOpen(true);
@@ -187,79 +203,94 @@ function IGHAirdropTasks() {
       link: "",
       points: "",
       proofPlaceholder: "",
-      category: categories.length ? categories[0]._id : "",
+      category: "Special",
       logo: "",
     });
   };
 
+  // Handle submission of new or updated task
+  const handleSubmitTask = async (e) => {
+    e.preventDefault();
+    try {
+      if (isEditMode) {
+        const response = await axios.put(
+          `${process.env.REACT_APP_API_URL}/igh-airdrop-tasks/${currentTaskId}`,
+          newTask
+        );
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task._id === currentTaskId ? response.data : task
+          )
+        );
+      } else {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/igh-airdrop-tasks`,
+          newTask
+        );
+        setTasks((prevTasks) => [...prevTasks, response.data]);
+      }
+    } catch (error) {
+      console.error("Error saving task:", error);
+    } finally {
+      setIsModalOpen(false);
+    }
+  };
+
+  // Handle task deletion
+  const handleDeleteTask = async (taskId) => {
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      try {
+        await axios.delete(
+          `${process.env.REACT_APP_API_URL}/igh-airdrop-tasks/${taskId}`
+        );
+        setTasks(tasks.filter((task) => task._id !== taskId));
+      } catch (error) {
+        console.error("Error deleting task:", error);
+      }
+    }
+  };
+
+  // Category CRUD operations
   const handleCreateCategory = () => {
     setIsCategoryModalOpen(true);
     setNewCategory({ name: "" });
     setEditCategoryId(null);
   };
 
-  const handleSubmitTask = async (e) => {
-    e.preventDefault();
-
-    if (isEditMode) {
-      try {
-        const response = await axios.put(`${process.env.REACT_APP_API_URL}/igh-airdrop-tasks/${currentTaskId}`, newTask);
-        setTasks(tasks.map((task) => (task._id === currentTaskId ? response.data : task)));
-      } catch (error) {
-        console.error("Error updating task:", error);
-      }
-    } else {
-      try {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/igh-airdrop-tasks`, newTask);
-        setTasks([...tasks, response.data]);
-      } catch (error) {
-        console.error("Error creating task:", error);
-      }
-    }
-
-    setIsModalOpen(false);
-    setNewTask({
-      name: "",
-      description: "",
-      link: "",
-      points: "",
-      proofPlaceholder: "",
-      category: categories.length ? categories[0]._id : "",
-      logo: "",
-    });
-  };
-
   const handleSubmitCategory = async (e) => {
     e.preventDefault();
-
-    if (editCategoryId) {
-      // Edit mode for category
-      try {
-        await axios.put(`${process.env.REACT_APP_API_URL}/igh-task-category/${editCategoryId}`, newCategory);
+    try {
+      if (editCategoryId) {
+        await axios.put(
+          `${process.env.REACT_APP_API_URL}/igh-task-category/${editCategoryId}`,
+          newCategory
+        );
         const updatedCategories = categories.map((category) =>
-          category._id === editCategoryId ? { ...category, ...newCategory } : category
+          category._id === editCategoryId
+            ? { ...category, ...newCategory }
+            : category
         );
         setCategories(updatedCategories);
-      } catch (error) {
-        console.error("Error updating category:", error);
-      }
-    } else {
-      // Create new category
-      try {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/igh-task-category`, newCategory);
+      } else {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/igh-task-category`,
+          newCategory
+        );
         setCategories([...categories, response.data]);
-      } catch (error) {
-        console.error("Error creating category:", error);
       }
+    } catch (error) {
+      console.error("Error saving category:", error);
+    } finally {
+      setIsCategoryModalOpen(false);
     }
-
-    setIsCategoryModalOpen(false);
   };
 
   const handleDeleteCategory = async (categoryId) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
       try {
-        await axios.delete(`${process.env.REACT_APP_API_URL}/igh-task-category/${categoryId}`);
+        await axios.delete(
+          `${process.env.REACT_APP_API_URL}/igh-task-category/${categoryId}`
+        );
         setCategories(categories.filter((category) => category._id !== categoryId));
       } catch (error) {
         console.error("Error deleting category:", error);
@@ -267,6 +298,7 @@ function IGHAirdropTasks() {
     }
   };
 
+  // Drag and drop reordering for categories
   const handleDragEnd = (result) => {
     if (!result.destination) return;
 
@@ -278,9 +310,14 @@ function IGHAirdropTasks() {
 
     // Save the new order to the backend
     const reorderPromises = reorderedCategories.map((category, index) =>
-      axios.put(`${process.env.REACT_APP_API_URL}/igh-task-category/reorder/${category._id}`, { newOrder: index })
+      axios.put(
+        `${process.env.REACT_APP_API_URL}/igh-task-category/reorder/${category._id}`,
+        { newOrder: index }
+      )
     );
-    Promise.all(reorderPromises).catch((error) => console.error("Error reordering categories:", error));
+    Promise.all(reorderPromises).catch((error) =>
+      console.error("Error reordering categories:", error)
+    );
   };
 
   return (
@@ -289,6 +326,7 @@ function IGHAirdropTasks() {
       <CreateTaskButton onClick={handleCreateTask}>Create New Task</CreateTaskButton>
       <CreateCategoryButton onClick={handleCreateCategory}>Create New Category</CreateCategoryButton>
 
+      {/* Drag and Drop for Categories */}
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="categories">
           {(provided) => (
@@ -296,11 +334,21 @@ function IGHAirdropTasks() {
               {categories.map((category, index) => (
                 <Draggable key={category._id} draggableId={category._id} index={index}>
                   {(provided) => (
-                    <CategoryItem ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                    <CategoryItem
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
                       <span>{category.name}</span>
                       <div>
-                        <Button onClick={() => handleCreateCategory(category)}>Edit</Button>
-                        <ActionButton onClick={() => handleDeleteCategory(category._id)}>Delete</ActionButton>
+                        <Button onClick={() => {
+                          setEditCategoryId(category._id);
+                          setNewCategory({ name: category.name });
+                          setIsCategoryModalOpen(true);
+                        }}>Edit</Button>
+                        <ActionButton onClick={() => handleDeleteCategory(category._id)}>
+                          Delete
+                        </ActionButton>
                       </div>
                     </CategoryItem>
                   )}
@@ -311,6 +359,56 @@ function IGHAirdropTasks() {
           )}
         </Droppable>
       </DragDropContext>
+
+      {/* Task List */}
+      <TaskTable>
+        <Thead>
+          <tr>
+            <Th>Task Name</Th>
+            <Th>Description</Th>
+            <Th>Link</Th>
+            <Th>Points</Th>
+            <Th>Category</Th>
+            <Th>Actions</Th>
+          </tr>
+        </Thead>
+        <Tbody>
+          {tasks.map((task) => (
+            <tr key={task._id}>
+              <Td>{task.name}</Td>
+              <Td>{task.description}</Td>
+              <Td>
+                <a href={task.link} target="_blank" rel="noopener noreferrer">
+                  {task.link}
+                </a>
+              </Td>
+              <Td>{task.points}</Td>
+              <Td>{task.category}</Td>
+              <Td>
+                <Button onClick={() => {
+                  setCurrentTaskId(task._id);
+                  setIsEditMode(true);
+                  setNewTask({
+                    name: task.name,
+                    description: task.description,
+                    link: task.link,
+                    points: task.points,
+                    proofPlaceholder: task.proofPlaceholder,
+                    category: task.category,
+                    logo: task.logo || "",
+                  });
+                  setIsModalOpen(true);
+                }}>
+                  Edit
+                </Button>
+                <ActionButton onClick={() => handleDeleteTask(task._id)}>
+                  Delete
+                </ActionButton>
+              </Td>
+            </tr>
+          ))}
+        </Tbody>
+      </TaskTable>
 
       {/* Task Modal */}
       {isModalOpen && (
