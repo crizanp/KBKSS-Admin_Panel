@@ -75,7 +75,19 @@ const CreateCategoryButton = styled(Button)`
   padding: 10px 20px;
   margin-bottom: 20px;
 `;
+const Select = styled.select`
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px;
 
+  &:focus {
+    outline: none;
+    border-color: #2980b9;
+  }
+`;
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
