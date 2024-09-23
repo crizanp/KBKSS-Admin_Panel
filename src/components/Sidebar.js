@@ -93,7 +93,7 @@ function Sidebar() {
     { to: '/airdrops', icon: FaGift, label: 'Airdrops' },
     { to: '/users', icon: FaUsers, label: 'Users' },
     { to: '/igh-airdrop', icon: FaExchangeAlt, label: 'IGH Airdrop' },
-    { to: '/background', icon: FaImage, label: 'Background Image' }, // New icon for background
+    { to: '/background-image', icon: FaImage, label: 'Background Image' }, // New icon for background
     { to: '/referrals', icon: FaCoins, label: 'Referrals' },
     { to: '/settings', icon: FaCog, label: 'Settings' },
   ];
