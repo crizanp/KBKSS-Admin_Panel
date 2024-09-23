@@ -38,21 +38,28 @@ const BackgroundItem = styled.div`
 function AdminBackgroundManager() {
   const [backgrounds, setBackgrounds] = useState([]);
   const [newBackgroundUrl, setNewBackgroundUrl] = useState('');
+  const [loading, setLoading] = useState(true); // Add a loading state
 
   useEffect(() => {
     fetchBackgrounds();
   }, []);
 
   const fetchBackgrounds = async () => {
-    const response = await axios.get('/background');
-    setBackgrounds(response.data);
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/background`); // Make sure this endpoint is correct
+      setBackgrounds(response.data); // Assuming response.data is the array of backgrounds
+    } catch (error) {
+      console.error('Error fetching backgrounds:', error);
+    } finally {
+      setLoading(false); // Ensure loading state is turned off after data fetch
+    }
   };
 
   const handleAddBackground = async () => {
     if (!newBackgroundUrl) return;
 
     try {
-      await axios.post('/background', { url: newBackgroundUrl });
+      await axios.post(`${process.env.REACT_APP_API_URL}/background`, { url: newBackgroundUrl });
       setNewBackgroundUrl('');
       fetchBackgrounds(); // Refresh the list
     } catch (error) {
@@ -62,7 +69,7 @@ function AdminBackgroundManager() {
 
   const handleSetActive = async (id) => {
     try {
-      await axios.put(`/background/set-active/${id}`);
+      await axios.put(`${process.env.REACT_APP_API_URL}/background/set-active/${id}`);
       fetchBackgrounds(); // Refresh the list
     } catch (error) {
       console.error('Error setting background as active:', error);
@@ -71,12 +78,22 @@ function AdminBackgroundManager() {
 
   const handleDeleteBackground = async (id) => {
     try {
-      await axios.delete(`/background/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/background/${id}`);
       fetchBackgrounds(); // Refresh the list
     } catch (error) {
       console.error('Error deleting background:', error);
     }
   };
+
+  // Return a loading state if data is still being fetched
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // If backgrounds is not an array, prevent map from running
+  if (!Array.isArray(backgrounds)) {
+    return <div>No backgrounds available.</div>;
+  }
 
   return (
     <AdminContainer>
