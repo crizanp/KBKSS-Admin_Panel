@@ -21,6 +21,7 @@ const Input = styled.input`
 
 const Button = styled.button`
   padding: 10px;
+  margin: 10px;
   background-color: #3498db;
   color: white;
   border: none;
@@ -52,13 +53,19 @@ function AdminBackgroundManager() {
   const fetchBackgrounds = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/background`);
-      setBackgrounds(response.data);
+      const activeBackground = response.data.filter(bg => bg.status === 'active');
+      const inactiveBackgrounds = response.data
+        .filter(bg => bg.status === 'inactive')
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sort inactive by latest created date
+  
+      setBackgrounds([...activeBackground, ...inactiveBackgrounds]); // Active first, then sorted inactive
     } catch (error) {
       console.error('Error fetching backgrounds:', error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleAddBackground = async () => {
     if (!newBackgroundUrl) return;
