@@ -93,8 +93,9 @@ function Sidebar() {
     { to: '/airdrops', icon: FaGift, label: 'Airdrops' },
     { to: '/users', icon: FaUsers, label: 'Users' },
     { to: '/igh-airdrop', icon: FaExchangeAlt, label: 'IGH Airdrop' },
-    { to: '/background-image', icon: FaImage, label: 'Background Image' }, // New icon for background
+    { to: '/background-image', icon: FaImage, label: 'Background Image' },
     { to: '/referrals', icon: FaCoins, label: 'Referrals' },
+    { to: '/quiz-management', icon: FaTasks, label: 'Quiz Management' }, // New Quiz Management link
     { to: '/settings', icon: FaCog, label: 'Settings' },
   ];
 
