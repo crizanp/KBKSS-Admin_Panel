@@ -87,13 +87,14 @@ function AdminBackgroundManager() {
 
   const confirmSetActive = async (id) => {
     try {
-      await axios.put(`${process.env.REACT_APP_API_URL}/background/set-active/${id}`);
+      await axios.put(`${process.env.REACT_APP_API_URL}/background/set-active/${id}`, { status: 'active' }); // Pass status: 'active'
       fetchBackgrounds();
     } catch (error) {
       console.error('Error setting background as active:', error);
     }
     setModalOpen(false);
   };
+  
 
   const handleDeleteBackground = (background) => {
     setModalMessage('Are you sure you want to delete this background?');
@@ -121,13 +122,14 @@ function AdminBackgroundManager() {
 
   const confirmSetInactive = async (id) => {
     try {
-      await axios.put(`${process.env.REACT_APP_API_URL}/background/set-active/${id}`, { status: 'inactive' });
+      await axios.put(`${process.env.REACT_APP_API_URL}/background/set-active/${id}`, { status: 'inactive' }); // Pass status: 'inactive'
       fetchBackgrounds();
     } catch (error) {
       console.error('Error setting background as inactive:', error);
     }
     setModalOpen(false);
   };
+  
   
 
   // Close the modal
