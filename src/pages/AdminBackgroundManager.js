@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import ConfirmationModal from '../components/ConfirmationModal'; // Import the modal
 
 const AdminContainer = styled.div`
   padding: 20px;
@@ -38,7 +39,11 @@ const BackgroundItem = styled.div`
 function AdminBackgroundManager() {
   const [backgrounds, setBackgrounds] = useState([]);
   const [newBackgroundUrl, setNewBackgroundUrl] = useState('');
-  const [loading, setLoading] = useState(true); // Add a loading state
+  const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [action, setAction] = useState(null); // The action to confirm
+  const [selectedBackground, setSelectedBackground] = useState(null); // Selected background for confirmation
 
   useEffect(() => {
     fetchBackgrounds();
@@ -46,12 +51,12 @@ function AdminBackgroundManager() {
 
   const fetchBackgrounds = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/background`); // Make sure this endpoint is correct
-      setBackgrounds(response.data); // Assuming response.data is the array of backgrounds
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/background`);
+      setBackgrounds(response.data);
     } catch (error) {
       console.error('Error fetching backgrounds:', error);
     } finally {
-      setLoading(false); // Ensure loading state is turned off after data fetch
+      setLoading(false);
     }
   };
 
@@ -61,36 +66,79 @@ function AdminBackgroundManager() {
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}/background`, { url: newBackgroundUrl });
       setNewBackgroundUrl('');
-      fetchBackgrounds(); // Refresh the list
+      fetchBackgrounds();
     } catch (error) {
       console.error('Error adding background:', error);
     }
   };
 
-  const handleSetActive = async (id) => {
+  const handleSetActive = (background) => {
+    const activeBackground = backgrounds.find((bg) => bg.status === 'active');
+    if (activeBackground) {
+      setModalMessage(`There is already an active background. Please deactivate it first.`);
+      setAction(null);
+    } else {
+      setModalMessage('Are you sure you want to make this background active?');
+      setAction(() => () => confirmSetActive(background._id));
+    }
+    setSelectedBackground(background);
+    setModalOpen(true);
+  };
+
+  const confirmSetActive = async (id) => {
     try {
       await axios.put(`${process.env.REACT_APP_API_URL}/background/set-active/${id}`);
-      fetchBackgrounds(); // Refresh the list
+      fetchBackgrounds();
     } catch (error) {
       console.error('Error setting background as active:', error);
     }
+    setModalOpen(false);
   };
 
-  const handleDeleteBackground = async (id) => {
+  const handleDeleteBackground = (background) => {
+    setModalMessage('Are you sure you want to delete this background?');
+    setAction(() => () => confirmDeleteBackground(background._id));
+    setSelectedBackground(background);
+    setModalOpen(true);
+  };
+
+  const confirmDeleteBackground = async (id) => {
     try {
       await axios.delete(`${process.env.REACT_APP_API_URL}/background/${id}`);
-      fetchBackgrounds(); // Refresh the list
+      fetchBackgrounds();
     } catch (error) {
       console.error('Error deleting background:', error);
     }
+    setModalOpen(false);
   };
 
-  // Return a loading state if data is still being fetched
+  const handleSetInactive = (background) => {
+    setModalMessage('Are you sure you want to make this background inactive?');
+    setAction(() => () => confirmSetInactive(background._id));
+    setSelectedBackground(background);
+    setModalOpen(true);
+  };
+
+  const confirmSetInactive = async (id) => {
+    try {
+      await axios.put(`${process.env.REACT_APP_API_URL}/background/set-inactive/${id}`);
+      fetchBackgrounds();
+    } catch (error) {
+      console.error('Error setting background as inactive:', error);
+    }
+    setModalOpen(false);
+  };
+
+  // Close the modal
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedBackground(null);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  // If backgrounds is not an array, prevent map from running
   if (!Array.isArray(backgrounds)) {
     return <div>No backgrounds available.</div>;
   }
@@ -115,12 +163,22 @@ function AdminBackgroundManager() {
           </div>
           <div>
             {bg.status === 'inactive' && (
-              <Button onClick={() => handleSetActive(bg._id)}>Set Active</Button>
+              <Button onClick={() => handleSetActive(bg)}>Set Active</Button>
             )}
-            <Button onClick={() => handleDeleteBackground(bg._id)}>Delete</Button>
+            {bg.status === 'active' && (
+              <Button onClick={() => handleSetInactive(bg)}>Set Inactive</Button>
+            )}
+            <Button onClick={() => handleDeleteBackground(bg)}>Delete</Button>
           </div>
         </BackgroundItem>
       ))}
+
+      <ConfirmationModal
+        isOpen={modalOpen}
+        message={modalMessage}
+        onConfirm={action}
+        onCancel={closeModal}
+      />
     </AdminContainer>
   );
 }
