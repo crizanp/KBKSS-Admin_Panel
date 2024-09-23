@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { FaBars, FaHome, FaCoins, FaTasks, FaUsers, FaCog, FaQuestion, FaGift, FaExchangeAlt } from 'react-icons/fa';
+import { FaBars, FaHome, FaCoins, FaTasks, FaUsers, FaCog, FaQuestion, FaGift, FaExchangeAlt, FaImage } from 'react-icons/fa';
 
 const SidebarContainer = styled.div`
   width: ${(props) => (props.isOpen ? '200px' : '60px')};
@@ -20,7 +20,8 @@ const SidebarContainer = styled.div`
   z-index: 100;
 
   @media (max-width: 768px) {
-    width: ${(props) => (props.isOpen ? '150px' : '50px')};
+    width: ${(props) => (props.isOpen ? '150px' : '0')};
+    overflow: hidden;
   }
 `;
 
@@ -87,42 +88,28 @@ function Sidebar() {
     setIsOpen(!isOpen);
   };
 
+  const menuItems = [
+    { to: '/', icon: FaHome, label: 'Dashboard' },
+    { to: '/airdrops', icon: FaGift, label: 'Airdrops' },
+    { to: '/users', icon: FaUsers, label: 'Users' },
+    { to: '/igh-airdrop', icon: FaExchangeAlt, label: 'IGH Airdrop' },
+    { to: '/background', icon: FaImage, label: 'Background Image' }, // New icon for background
+    { to: '/referrals', icon: FaCoins, label: 'Referrals' },
+    { to: '/settings', icon: FaCog, label: 'Settings' },
+  ];
+
   return (
     <SidebarContainer isOpen={isOpen}>
-      <SidebarToggle isOpen={isOpen} onClick={toggleSidebar}>
+      <SidebarToggle isOpen={isOpen} onClick={toggleSidebar} aria-expanded={isOpen ? 'true' : 'false'}>
         <FaBars />
       </SidebarToggle>
       <Logo isOpen={isOpen}>{isOpen ? "🌟 Admin" : "🌟"}</Logo>
-      <SidebarItem to="/" exact isOpen={isOpen}>
-        <FaHome /> <span>Dashboard</span>
-      </SidebarItem>
-      <SidebarItem to="/airdrops" isOpen={isOpen}>
-        <FaGift /> <span>Airdrops</span>
-      </SidebarItem>
-      {/* <SidebarItem to="/tasks" isOpen={isOpen}>
-        <FaTasks /> <span>Tasks</span>
-      </SidebarItem> */}
-      <SidebarItem to="/users" isOpen={isOpen}>
-        <FaUsers /> <span>Users</span>
-      </SidebarItem>
-      <SidebarItem to="/igh-airdrop" isOpen={isOpen}>
-        <FaExchangeAlt /> <span>IGH Airdrop</span>
-      </SidebarItem>
-      <SidebarItem to="/igh-airdrop" isOpen={isOpen}>
-        <FaExchangeAlt /> <span>Background Image</span>
-      </SidebarItem>
-      {/* <SidebarItem to="/tresure-hunt" isOpen={isOpen}>
-        <FaExchangeAlt /> <span>Tresure Hunt</span>
-      </SidebarItem> */}
-      {/* <SidebarItem to="/quiz-management" isOpen={isOpen}>
-        <FaQuestion /> <span>Quiz Management</span>
-      </SidebarItem> */}
-      <SidebarItem to="/referrals" isOpen={isOpen}>
-        <FaCoins /> <span>Referrals</span>
-      </SidebarItem>
-      <SidebarItem to="/settings" isOpen={isOpen}>
-        <FaCog /> <span>Settings</span>
-      </SidebarItem>
+
+      {menuItems.map((item, index) => (
+        <SidebarItem key={index} to={item.to} exact isOpen={isOpen}>
+          <item.icon /> <span>{item.label}</span>
+        </SidebarItem>
+      ))}
     </SidebarContainer>
   );
 }
