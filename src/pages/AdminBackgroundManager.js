@@ -53,18 +53,15 @@ function AdminBackgroundManager() {
   const fetchBackgrounds = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/background`);
-      const activeBackground = response.data.filter(bg => bg.status === 'active');
-      const inactiveBackgrounds = response.data
-        .filter(bg => bg.status === 'inactive')
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sort inactive by latest created date
-  
-      setBackgrounds([...activeBackground, ...inactiveBackgrounds]); // Active first, then sorted inactive
+      setBackgrounds(response.data); // The backend now returns the sorted list
     } catch (error) {
       console.error('Error fetching backgrounds:', error);
     } finally {
       setLoading(false);
     }
   };
+  
+  
   
 
   const handleAddBackground = async () => {
