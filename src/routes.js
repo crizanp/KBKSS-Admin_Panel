@@ -13,6 +13,7 @@ import ReferralTracking from "./pages/ReferralTracking";
 import NotFound from "./pages/NotFound"; 
 import AdminTreasureHuntSettings from "./pages/TresureHunt";
 import EditAirdrop from './components/EditAirdrop';  // Import EditAirdrop page
+import AdminBackgroundManager from "./pages/AdminBackgroundManager";
 
 function AppRoutes() {
   return (
@@ -93,6 +94,14 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <ReferralTracking />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/background-image"
+        element={
+          <PrivateRoute>
+            <AdminBackgroundManager />
           </PrivateRoute>
         }
       />

@@ -108,6 +108,9 @@ function Sidebar() {
       <SidebarItem to="/igh-airdrop" isOpen={isOpen}>
         <FaExchangeAlt /> <span>IGH Airdrop</span>
       </SidebarItem>
+      <SidebarItem to="/igh-airdrop" isOpen={isOpen}>
+        <FaExchangeAlt /> <span>Background Image</span>
+      </SidebarItem>
       {/* <SidebarItem to="/tresure-hunt" isOpen={isOpen}>
         <FaExchangeAlt /> <span>Tresure Hunt</span>
       </SidebarItem> */}
