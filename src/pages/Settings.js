@@ -59,30 +59,14 @@ function Settings() {
         <Button onClick={() => deleteUsers('3hours', 'general')}>
           Delete General Users - 3 Hours Old
         </Button>
-        <Button onClick={() => deleteUsers('1day', 'general')}>
-          Delete General Users - 1 Day Old
-        </Button>
-        <Button onClick={() => deleteUsers('3days', 'general')}>
-          Delete General Users - 3 Days Old
-        </Button>
-        <Button onClick={() => deleteUsers('7days', 'general')}>
-          Delete General Users - 7 Days Old
-        </Button>
+       
 
         {/* Referral Users */}
         <h2>Delete Referral Users with 0 Points</h2>
         <Button onClick={() => deleteUsers('3hours', 'referral')}>
           Delete Referral Users - 3 Hours Old
         </Button>
-        <Button onClick={() => deleteUsers('1day', 'referral')}>
-          Delete Referral Users - 1 Day Old
-        </Button>
-        <Button onClick={() => deleteUsers('3days', 'referral')}>
-          Delete Referral Users - 3 Days Old
-        </Button>
-        <Button onClick={() => deleteUsers('7days', 'referral')}>
-          Delete Referral Users - 7 Days Old
-        </Button>
+        
       </ButtonWrapper>
     </Container>
   );
