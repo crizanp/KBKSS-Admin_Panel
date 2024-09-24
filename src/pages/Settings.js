@@ -8,8 +8,8 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full viewport height */
-  background-color: #f4f4f4; /* Light background for better contrast */
+  height: 100vh;
+  background-color: #f4f4f4;
 `;
 
 const ButtonWrapper = styled.div`
@@ -27,7 +27,7 @@ const Button = styled.button`
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  margin-top: 20px;
+  margin: 10px;
 
   &:hover {
     background-color: #c0392b;
@@ -35,15 +35,17 @@ const Button = styled.button`
 `;
 
 function Settings() {
-  const handleDeleteUsers = async () => {
+  const deleteUsers = async (timeRange, type) => {
     try {
-      const response = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/admin/delete-zero-point-users`
-      );
+      const endpoint = type === 'referral' 
+        ? `${process.env.REACT_APP_API_URL}/admin/delete-referral-zero-point-users/${timeRange}`
+        : `${process.env.REACT_APP_API_URL}/admin/delete-zero-point-users/${timeRange}`;
+        
+      const response = await axios.delete(endpoint);
       alert(response.data.message);
     } catch (error) {
-      console.error('Error deleting users with 0 points:', error);
-      alert('Failed to delete users');
+      console.error(`Error deleting ${type} users with ${timeRange}`, error);
+      alert(`Failed to delete ${type} users for ${timeRange}`);
     }
   };
 
@@ -51,8 +53,35 @@ function Settings() {
     <Container>
       <ButtonWrapper>
         <Logout />
-        <Button onClick={handleDeleteUsers}>
-          Delete All Users with 0 Points
+
+        {/* General Users */}
+        <h2>Delete General Users with 0 Points</h2>
+        <Button onClick={() => deleteUsers('3hours', 'general')}>
+          Delete General Users - 3 Hours Old
+        </Button>
+        <Button onClick={() => deleteUsers('1day', 'general')}>
+          Delete General Users - 1 Day Old
+        </Button>
+        <Button onClick={() => deleteUsers('3days', 'general')}>
+          Delete General Users - 3 Days Old
+        </Button>
+        <Button onClick={() => deleteUsers('7days', 'general')}>
+          Delete General Users - 7 Days Old
+        </Button>
+
+        {/* Referral Users */}
+        <h2>Delete Referral Users with 0 Points</h2>
+        <Button onClick={() => deleteUsers('3hours', 'referral')}>
+          Delete Referral Users - 3 Hours Old
+        </Button>
+        <Button onClick={() => deleteUsers('1day', 'referral')}>
+          Delete Referral Users - 1 Day Old
+        </Button>
+        <Button onClick={() => deleteUsers('3days', 'referral')}>
+          Delete Referral Users - 3 Days Old
+        </Button>
+        <Button onClick={() => deleteUsers('7days', 'referral')}>
+          Delete Referral Users - 7 Days Old
         </Button>
       </ButtonWrapper>
     </Container>
