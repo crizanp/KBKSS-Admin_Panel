@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import AdminTreasureHuntSettings from "./pages/TresureHunt";
 import EditAirdrop from './components/EditAirdrop';  // Import EditAirdrop page
 import AdminBackgroundManager from "./pages/AdminBackgroundManager";
+import AdminAvatarManager from "./pages/AdminAvatarManager";
 
 function AppRoutes() {
   return (
@@ -110,6 +111,14 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <AdminTreasureHuntSettings />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/avatar-manage"
+        element={
+          <PrivateRoute>
+            <AdminAvatarManager />
           </PrivateRoute>
         }
       />

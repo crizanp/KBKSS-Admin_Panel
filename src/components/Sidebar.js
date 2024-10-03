@@ -97,6 +97,7 @@ function Sidebar() {
     { to: '/referrals', icon: FaCoins, label: 'Referrals' },
     { to: '/quiz-management', icon: FaTasks, label: 'Quiz Management' }, // New Quiz Management link
     { to: '/settings', icon: FaCog, label: 'Settings' },
+    { to: '/avatar-manage', icon: FaImage, label: 'Avatar' },
   ];
 
   return (
