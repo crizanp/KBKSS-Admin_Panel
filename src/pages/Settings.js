@@ -22,6 +22,12 @@ const SectionTitle = styled.h2`
   margin-bottom: 10px;
 `;
 
+const CountText = styled.p`
+  color: #34495e;
+  font-size: 16px;
+  margin-bottom: 20px;
+`;
+
 const DeleteButton = styled.button`
   padding: 10px 20px;
   font-size: 16px;
@@ -51,7 +57,7 @@ const DeleteList = styled.ul`
   list-style: none;
   padding: 0;
   width: 100%;
-  max-height: 300px;
+  max-height: 600px;
   overflow-y: auto;
 `;
 
@@ -170,6 +176,7 @@ function Settings() {
 
       {/* User Management Section */}
       <SectionTitle>Delete Users with 0 Points</SectionTitle>
+      <CountText>Total users with 0 points: {usersWithZeroPoints.length}</CountText>
       <DeleteButton onClick={() => setIsModalOpen(true)}>Delete Users with 0 Points</DeleteButton>
 
       <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} ariaHideApp={false}>
@@ -203,6 +210,7 @@ function Settings() {
 
       {/* Referral Management Section */}
       <SectionTitle>Delete Referrals with 0 Points Awarded</SectionTitle>
+      <CountText>Total referrals with 0 points awarded: {referralsWithZeroPoints.length}</CountText>
       <DeleteButton onClick={() => setIsReferralModalOpen(true)}>Delete Referrals with 0 Points</DeleteButton>
 
       <Modal isOpen={isReferralModalOpen} onRequestClose={() => setIsReferralModalOpen(false)} ariaHideApp={false}>
