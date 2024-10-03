@@ -15,6 +15,7 @@ import AdminTreasureHuntSettings from "./pages/TresureHunt";
 import EditAirdrop from './components/EditAirdrop';  // Import EditAirdrop page
 import AdminBackgroundManager from "./pages/AdminBackgroundManager";
 import AdminAvatarManager from "./pages/AdminAvatarManager";
+import FallbackImageManager from "./pages/FallbackImageManager";
 
 function AppRoutes() {
   return (
@@ -119,6 +120,14 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <AdminAvatarManager />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/default-avatar-manage"
+        element={
+          <PrivateRoute>
+            <FallbackImageManager />
           </PrivateRoute>
         }
       />

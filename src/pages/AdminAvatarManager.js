@@ -3,6 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { Modal, Spin, message } from 'antd'; // Ant Design modal and spinner for better user experience
 import ConfirmationModal from '../components/ConfirmationModal';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const AdminContainer = styled.div`
   padding: 20px;
@@ -168,7 +169,10 @@ function AdminAvatarManager() {
   return (
     <AdminContainer>
       <Title>Manage Avatars</Title>
-
+      <Title>Want to manage default avatar? </Title>
+      <Link to="/default-avatar-manage">
+        <Button>Manage Default Avatar</Button>
+      </Link>
       {/* Form to add a new avatar */}
       <Input
         type="text"
