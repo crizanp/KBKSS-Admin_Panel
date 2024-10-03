@@ -119,18 +119,11 @@ function AdminAvatarManager() {
     setSelectedAvatar(null);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!Array.isArray(avatars) || avatars.length === 0) {
-    return <div>No avatars available.</div>;
-  }
-
   return (
     <AdminContainer>
       <Title>Manage Avatars</Title>
 
+      {/* The form to add a new avatar should always be visible */}
       <Input
         type="text"
         value={newAvatar.name}
@@ -165,20 +158,27 @@ function AdminAvatarManager() {
       </label>
       <Button onClick={handleAddAvatar}>Add Avatar</Button>
 
-      {avatars.map((avatar) => (
-        <AvatarItem key={avatar._id}>
-          <div>
-            <img src={avatar.image} alt={avatar.name} width="100" />
-            <p>Name: {avatar.name}</p>
-            <p>Level Required: {avatar.levelRequired}</p>
-            <p>Gems Required: {avatar.gemsRequired}</p>
-          </div>
-          <div>
-            <Button onClick={() => handleUpdateAvatar(avatar)}>Update</Button>
-            <Button onClick={() => handleDeleteAvatar(avatar)}>Delete</Button>
-          </div>
-        </AvatarItem>
-      ))}
+      {/* Show a loading message while avatars are being fetched */}
+      {loading ? (
+        <div>Loading...</div>
+      ) : avatars.length === 0 ? (
+        <div>No avatars available.</div>
+      ) : (
+        avatars.map((avatar) => (
+          <AvatarItem key={avatar._id}>
+            <div>
+              <img src={avatar.image} alt={avatar.name} width="100" />
+              <p>Name: {avatar.name}</p>
+              <p>Level Required: {avatar.levelRequired}</p>
+              <p>Gems Required: {avatar.gemsRequired}</p>
+            </div>
+            <div>
+              <Button onClick={() => handleUpdateAvatar(avatar)}>Update</Button>
+              <Button onClick={() => handleDeleteAvatar(avatar)}>Delete</Button>
+            </div>
+          </AvatarItem>
+        ))
+      )}
 
       <ConfirmationModal
         isOpen={modalOpen}
