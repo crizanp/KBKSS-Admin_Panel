@@ -169,7 +169,7 @@ function AdminAvatarManager() {
   return (
     <AdminContainer>
       <Title>Manage Avatars</Title>
-      <Title>Want to manage default avatar? </Title>
+      Want to manage default avatar? 
       <Link to="/default-avatar-manage">
         <Button>Manage Default Avatar</Button>
       </Link>
