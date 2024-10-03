@@ -54,6 +54,14 @@ const Button = styled.button`
   }
 `;
 
+const ImagePreview = styled.img`
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
 function FallbackImageManager() {
   const [fallbackImage, setFallbackImage] = useState('');
   const [fallbackId, setFallbackId] = useState(null);
@@ -120,6 +128,10 @@ function FallbackImageManager() {
     <FallbackContainer>
       <FallbackSection>
         <Title>Manage Fallback Image</Title>
+        
+        {/* Display the current fallback image */}
+        {fallbackImage && <ImagePreview src={fallbackImage} alt="Fallback Avatar" />}
+
         <Input
           type="text"
           value={fallbackImage}
