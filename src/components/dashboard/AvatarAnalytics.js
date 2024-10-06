@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import Modal from 'react-modal';
+import { animated, useSpring } from 'react-spring'; // Import for animation
 
+// Styling components
 const AnalyticsContainer = styled.div`
   padding: 20px;
   background-color: #f0fbf0;
@@ -41,10 +43,17 @@ const AvatarAnalytics = () => {
   const [modalData, setModalData] = useState([]);
   const [modalTitle, setModalTitle] = useState('');
 
+  // Modal animation using react-spring
+  const animation = useSpring({
+    opacity: modalIsOpen ? 1 : 0,
+    transform: modalIsOpen ? 'scale(1)' : 'scale(0.7)',
+    config: { tension: 220, friction: 20 },
+  });
+
   useEffect(() => {
     const fetchAvatars = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-avatar/avatars`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/avatars`);
         setAvatars(response.data);
       } catch (error) {
         console.error('Error fetching avatars:', error);
@@ -56,7 +65,7 @@ const AvatarAnalytics = () => {
 
   const handleUnlockClick = async (avatarId, avatarName) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-avatar/avatar/${avatarId}/unlocked-users`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/avatar/${avatarId}/unlocked-users`);
       setModalData(response.data);
       setModalTitle(`Users who unlocked ${avatarName}`);
       setModalIsOpen(true);
@@ -67,7 +76,7 @@ const AvatarAnalytics = () => {
 
   const handleActiveClick = async (avatarId, avatarName) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-avatar/avatar/${avatarId}/active-users`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/avatar/${avatarId}/active-users`);
       setModalData(response.data);
       setModalTitle(`Users with ${avatarName} set as active`);
       setModalIsOpen(true);
@@ -96,22 +105,53 @@ const AvatarAnalytics = () => {
           {avatars.map((avatar) => (
             <TableRow key={avatar._id}>
               <TableCell>{avatar.name}</TableCell>
-              <TableCell onClick={() => handleUnlockClick(avatar._id, avatar.name)}>{avatar.unlockedByCount || 0}</TableCell>
-              <TableCell onClick={() => handleActiveClick(avatar._id, avatar.name)}>{avatar.activeUsersCount || 0}</TableCell>
+              <TableCell onClick={() => handleUnlockClick(avatar._id, avatar.name)}>
+                {avatar.unlockedByCount}
+              </TableCell>
+              <TableCell onClick={() => handleActiveClick(avatar._id, avatar.name)}>
+                {avatar.activeUsersCount}
+              </TableCell>
             </TableRow>
           ))}
         </tbody>
       </Table>
 
-      <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
-        <h2>{modalTitle}</h2>
-        <button onClick={closeModal}>Close</button>
-        <ul>
-          {modalData.map((user) => (
-            <li key={user.userID}>{user.username || user.userID}</li>
-          ))}
-        </ul>
-      </Modal>
+      {modalIsOpen && (
+        <animated.div style={animation}>
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={{
+              content: {
+                top: '50%',
+                left: '50%',
+                right: 'auto',
+                bottom: 'auto',
+                marginRight: '-50%',
+                transform: 'translate(-50%, -50%)',
+                borderRadius: '15px',
+                padding: '20px',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+              },
+              overlay: {
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              },
+            }}
+          >
+            <h2>{modalTitle}</h2>
+            <button onClick={closeModal}>Close</button>
+            <ul>
+              {modalData.length ? (
+                modalData.map((user) => (
+                  <li key={user.userID}>{user.username || user.userID}</li>
+                ))
+              ) : (
+                <p>No users found</p>
+              )}
+            </ul>
+          </Modal>
+        </animated.div>
+      )}
     </AnalyticsContainer>
   );
 };
