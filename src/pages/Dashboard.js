@@ -4,6 +4,7 @@ import UserGrowthChart from '../components/dashboard/UserGrowthChart';
 import TopUserTable from '../components/dashboard/TopUsersTable';
 import EngagementMetrics from '../components/dashboard/EngagementMetrics';
 import AirdropAnalytics from '../components/dashboard/AirdropAnalytics';
+import AvatarAnalytics from '../components/dashboard/AvatarAnalytics';
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -16,11 +17,11 @@ const HalfWidthContainer = styled.div`
   background-color: #f0fbf0;
   padding: 10px;
   border-radius: 8px;
-  width: 48%; /* Set width to 48% to allow for spacing */
+  width: 48%;
   margin-bottom: 20px;
 
   @media (max-width: 768px) {
-    width: 100%; /* Full width on smaller screens */
+    width: 100%;
   }
 `;
 
@@ -37,6 +38,7 @@ function Dashboard() {
       </DashboardContainer>
       <TopUserTable />
       <AirdropAnalytics />
+      <AvatarAnalytics />
     </>
   );
 }
