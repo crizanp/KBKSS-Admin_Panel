@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import Modal from 'react-modal';
-import { animated, useSpring } from 'react-spring'; // Import for animation
 
-// Styling components
 const AnalyticsContainer = styled.div`
   padding: 20px;
   background-color: #f0fbf0;
@@ -37,18 +35,25 @@ const TableCell = styled.td`
   border-bottom: 1px solid #ddd;
 `;
 
+const ModalContent = styled.div`
+  animation: fadeInScale 0.4s ease-out;
+  @keyframes fadeInScale {
+    0% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+`;
+
 const AvatarAnalytics = () => {
   const [avatars, setAvatars] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalData, setModalData] = useState([]);
   const [modalTitle, setModalTitle] = useState('');
-
-  // Modal animation using react-spring
-  const animation = useSpring({
-    opacity: modalIsOpen ? 1 : 0,
-    transform: modalIsOpen ? 'scale(1)' : 'scale(0.7)',
-    config: { tension: 220, friction: 20 },
-  });
 
   useEffect(() => {
     const fetchAvatars = async () => {
@@ -117,27 +122,27 @@ const AvatarAnalytics = () => {
       </Table>
 
       {modalIsOpen && (
-        <animated.div style={animation}>
-          <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={closeModal}
-            style={{
-              content: {
-                top: '50%',
-                left: '50%',
-                right: 'auto',
-                bottom: 'auto',
-                marginRight: '-50%',
-                transform: 'translate(-50%, -50%)',
-                borderRadius: '15px',
-                padding: '20px',
-                boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
-              },
-              overlay: {
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              },
-            }}
-          >
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={{
+            content: {
+              top: '50%',
+              left: '50%',
+              right: 'auto',
+              bottom: 'auto',
+              marginRight: '-50%',
+              transform: 'translate(-50%, -50%)',
+              borderRadius: '15px',
+              padding: '20px',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+            },
+            overlay: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          }}
+        >
+          <ModalContent>
             <h2>{modalTitle}</h2>
             <button onClick={closeModal}>Close</button>
             <ul>
@@ -149,8 +154,8 @@ const AvatarAnalytics = () => {
                 <p>No users found</p>
               )}
             </ul>
-          </Modal>
-        </animated.div>
+          </ModalContent>
+        </Modal>
       )}
     </AnalyticsContainer>
   );
