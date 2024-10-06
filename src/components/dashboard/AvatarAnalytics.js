@@ -44,7 +44,7 @@ const AvatarAnalytics = () => {
   useEffect(() => {
     const fetchAvatars = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-avatar`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-avatar/avatars`);
         setAvatars(response.data);
       } catch (error) {
         console.error('Error fetching avatars:', error);
@@ -56,7 +56,7 @@ const AvatarAnalytics = () => {
 
   const handleUnlockClick = async (avatarId, avatarName) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-avatar/${avatarId}/unlocked-users`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-avatar/avatar/${avatarId}/unlocked-users`);
       setModalData(response.data);
       setModalTitle(`Users who unlocked ${avatarName}`);
       setModalIsOpen(true);
@@ -67,7 +67,7 @@ const AvatarAnalytics = () => {
 
   const handleActiveClick = async (avatarId, avatarName) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-avatar/${avatarId}/active-users`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-avatar/avatar/${avatarId}/active-users`);
       setModalData(response.data);
       setModalTitle(`Users with ${avatarName} set as active`);
       setModalIsOpen(true);
