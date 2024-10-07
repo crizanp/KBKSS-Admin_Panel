@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { FaBars, FaHome, FaCoins, FaTasks, FaUsers, FaCog, FaQuestion, FaGift, FaExchangeAlt, FaImage } from 'react-icons/fa';
+import { FaBars, FaHome, FaCoins, FaTasks, FaUsers, FaCog, FaGift, FaExchangeAlt, FaImage, FaLevelUpAlt } from 'react-icons/fa';
 
 const SidebarContainer = styled.div`
   width: ${(props) => (props.isOpen ? '200px' : '60px')};
@@ -95,7 +95,8 @@ function Sidebar() {
     { to: '/igh-airdrop', icon: FaExchangeAlt, label: 'IGH Airdrop' },
     { to: '/background-image', icon: FaImage, label: 'Background Image' },
     { to: '/referrals', icon: FaCoins, label: 'Referrals' },
-    { to: '/quiz-management', icon: FaTasks, label: 'Quiz Management' }, // New Quiz Management link
+    { to: '/quiz-management', icon: FaTasks, label: 'Quiz Management' },
+    { to: '/level-management', icon: FaLevelUpAlt, label: 'Level Management' }, // New Level Management link
     { to: '/settings', icon: FaCog, label: 'Settings' },
     { to: '/avatar-manage', icon: FaImage, label: 'Avatar' },
   ];

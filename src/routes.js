@@ -16,6 +16,7 @@ import EditAirdrop from './components/EditAirdrop';  // Import EditAirdrop page
 import AdminBackgroundManager from "./pages/AdminBackgroundManager";
 import AdminAvatarManager from "./pages/AdminAvatarManager";
 import FallbackImageManager from "./pages/FallbackImageManager";
+import LevelManagement from "./pages/LevelManagement";
 
 function AppRoutes() {
   return (
@@ -128,6 +129,14 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <FallbackImageManager />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/level-management"
+        element={
+          <PrivateRoute>
+            <LevelManagement />
           </PrivateRoute>
         }
       />
