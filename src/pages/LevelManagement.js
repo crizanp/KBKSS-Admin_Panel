@@ -162,6 +162,7 @@ function LevelManagement() {
     avatarsUnlocked: '',
   });
   const [editLevelId, setEditLevelId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // New state to handle loading
 
   useEffect(() => {
     // Fetch all levels
@@ -186,12 +187,22 @@ function LevelManagement() {
   };
 
   const handleCreateOrEditLevel = async () => {
+    setIsLoading(true); // Disable button on submit
+    const formattedLevel = {
+      ...newLevel,
+      levelNumber: parseInt(newLevel.levelNumber),
+      tasks: parseInt(newLevel.tasks),
+      games: parseInt(newLevel.games),
+      invites: parseInt(newLevel.invites),
+      avatarsUnlocked: parseInt(newLevel.avatarsUnlocked),
+    };
+
     if (editLevelId) {
       // Edit existing level
       try {
-        await axios.put(`${process.env.REACT_APP_API_URL}/user-level/levels/${editLevelId}`, newLevel);
+        await axios.put(`${process.env.REACT_APP_API_URL}/user-level/levels/${editLevelId}`, formattedLevel);
         const updatedLevels = levels.map((level) =>
-          level._id === editLevelId ? { ...level, ...newLevel } : level
+          level._id === editLevelId ? { ...level, ...formattedLevel } : level
         );
         setLevels(updatedLevels);
       } catch (error) {
@@ -200,7 +211,7 @@ function LevelManagement() {
     } else {
       // Create new level
       try {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/user-level/levels`, newLevel);
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/user-level/levels`, formattedLevel);
         setLevels([...levels, response.data]);
       } catch (error) {
         console.error('Error creating level:', error);
@@ -217,6 +228,7 @@ function LevelManagement() {
       avatarsUnlocked: '',
     });
     setEditLevelId(null);
+    setIsLoading(false); // Re-enable button after API call completes
   };
 
   const handleEditLevel = (level) => {
@@ -341,7 +353,9 @@ function LevelManagement() {
                 onChange={handleInputChange}
                 required
               />
-              <Button type="submit">{editLevelId ? 'Update Level' : 'Create Level'}</Button>
+              <Button type="submit" disabled={isLoading}>
+                {editLevelId ? 'Update Level' : 'Create Level'}
+              </Button>
             </form>
           </ModalContent>
         </ModalOverlay>
