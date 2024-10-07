@@ -167,7 +167,7 @@ function LevelManagement() {
     // Fetch all levels
     const fetchLevels = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-levels/levels`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user-level/levels`);
         setLevels(response.data);
       } catch (error) {
         console.error('Error fetching levels:', error);
@@ -189,7 +189,7 @@ function LevelManagement() {
     if (editLevelId) {
       // Edit existing level
       try {
-        await axios.put(`${process.env.REACT_APP_API_URL}/user-levels/levels/${editLevelId}`, newLevel);
+        await axios.put(`${process.env.REACT_APP_API_URL}/user-level/levels/${editLevelId}`, newLevel);
         const updatedLevels = levels.map((level) =>
           level._id === editLevelId ? { ...level, ...newLevel } : level
         );
@@ -200,7 +200,7 @@ function LevelManagement() {
     } else {
       // Create new level
       try {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/user-levels/levels`, newLevel);
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/user-level/levels`, newLevel);
         setLevels([...levels, response.data]);
       } catch (error) {
         console.error('Error creating level:', error);
@@ -234,7 +234,7 @@ function LevelManagement() {
 
   const handleDeleteLevel = async (levelId) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/user-levels/levels/${levelId}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/user-level/levels/${levelId}`);
       setLevels(levels.filter((level) => level._id !== levelId));
     } catch (error) {
       console.error('Error deleting level:', error);
