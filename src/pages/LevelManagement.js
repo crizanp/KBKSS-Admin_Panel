@@ -189,15 +189,15 @@ function LevelManagement() {
   const handleCreateOrEditLevel = async () => {
     setIsLoading(true);
   
-    // Wrap the criteria fields inside a `criteria` object
+    // Ensure values are numbers, including 0
     const formattedLevel = {
       levelNumber: parseInt(newLevel.levelNumber),
       name: newLevel.name,
       criteria: {
-        tasks: parseInt(newLevel.tasks),
-        games: parseInt(newLevel.games),
-        invites: parseInt(newLevel.invites),
-        avatarsUnlocked: parseInt(newLevel.avatarsUnlocked),
+        tasks: newLevel.tasks !== '' ? parseInt(newLevel.tasks) : 0,
+        games: newLevel.games !== '' ? parseInt(newLevel.games) : 0,
+        invites: newLevel.invites !== '' ? parseInt(newLevel.invites) : 0,
+        avatarsUnlocked: newLevel.avatarsUnlocked !== '' ? parseInt(newLevel.avatarsUnlocked) : 0,
       },
     };
   
@@ -238,8 +238,6 @@ function LevelManagement() {
     setEditLevelId(null);
     setIsLoading(false);
   };
-  
-
   const handleEditLevel = (level) => {
     setEditLevelId(level._id);
     setNewLevel({
