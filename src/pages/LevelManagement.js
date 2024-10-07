@@ -188,18 +188,21 @@ function LevelManagement() {
 
   const handleCreateOrEditLevel = async () => {
     setIsLoading(true);
-    
+  
+    // Wrap the criteria fields inside a `criteria` object
     const formattedLevel = {
-      ...newLevel,
       levelNumber: parseInt(newLevel.levelNumber),
-      tasks: parseInt(newLevel.tasks),
-      games: parseInt(newLevel.games),
-      invites: parseInt(newLevel.invites),
-      avatarsUnlocked: parseInt(newLevel.avatarsUnlocked),
+      name: newLevel.name,
+      criteria: {
+        tasks: parseInt(newLevel.tasks),
+        games: parseInt(newLevel.games),
+        invites: parseInt(newLevel.invites),
+        avatarsUnlocked: parseInt(newLevel.avatarsUnlocked),
+      },
     };
-
-    console.log('Payload being sent:', formattedLevel); // Debugging: log the payload
-
+  
+    console.log('Payload being sent:', formattedLevel); // Log the payload to check
+  
     if (editLevelId) {
       // Edit existing level
       try {
@@ -210,6 +213,7 @@ function LevelManagement() {
         setLevels(updatedLevels);
       } catch (error) {
         console.error('Error updating level:', error);
+        console.log('Server response:', error.response); // Log the server response
       }
     } else {
       // Create new level
@@ -218,10 +222,10 @@ function LevelManagement() {
         setLevels([...levels, response.data]);
       } catch (error) {
         console.error('Error creating level:', error);
-        console.log('Server response:', error.response); // Debugging: log server response
+        console.log('Server response:', error.response); // Log the server response
       }
     }
-
+  
     setIsModalOpen(false);
     setNewLevel({
       levelNumber: '',
@@ -234,6 +238,7 @@ function LevelManagement() {
     setEditLevelId(null);
     setIsLoading(false);
   };
+  
 
   const handleEditLevel = (level) => {
     setEditLevelId(level._id);
