@@ -162,7 +162,7 @@ function LevelManagement() {
     avatarsUnlocked: '',
   });
   const [editLevelId, setEditLevelId] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // New state to handle loading
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Fetch all levels
@@ -187,7 +187,8 @@ function LevelManagement() {
   };
 
   const handleCreateOrEditLevel = async () => {
-    setIsLoading(true); // Disable button on submit
+    setIsLoading(true);
+    
     const formattedLevel = {
       ...newLevel,
       levelNumber: parseInt(newLevel.levelNumber),
@@ -196,6 +197,8 @@ function LevelManagement() {
       invites: parseInt(newLevel.invites),
       avatarsUnlocked: parseInt(newLevel.avatarsUnlocked),
     };
+
+    console.log('Payload being sent:', formattedLevel); // Debugging: log the payload
 
     if (editLevelId) {
       // Edit existing level
@@ -215,6 +218,7 @@ function LevelManagement() {
         setLevels([...levels, response.data]);
       } catch (error) {
         console.error('Error creating level:', error);
+        console.log('Server response:', error.response); // Debugging: log server response
       }
     }
 
@@ -228,7 +232,7 @@ function LevelManagement() {
       avatarsUnlocked: '',
     });
     setEditLevelId(null);
-    setIsLoading(false); // Re-enable button after API call completes
+    setIsLoading(false);
   };
 
   const handleEditLevel = (level) => {
