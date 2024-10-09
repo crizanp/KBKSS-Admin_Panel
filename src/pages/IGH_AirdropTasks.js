@@ -48,7 +48,7 @@ const Tbody = styled.tbody`
 const Td = styled.td`
   padding: 15px;
   vertical-align: middle;
-  word-break: break-word; /* Ensures long words break to fit */
+  word-break: break-word;
 `;
 
 const Button = styled.button`
@@ -177,11 +177,15 @@ function IGHAirdropTasks() {
     description: "",
     link: "",
     points: "",
-    proofPlaceholder: "",
+    proofPlaceholder: "", // Default placeholder value
     category: "Special",
-    logo: "", // Add this line
+    taskType: "",
+    telegramAction: "",
+    chatId: "",
+    logo: "",
   });
 
+  // Fetch tasks from the backend
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -197,6 +201,7 @@ function IGHAirdropTasks() {
     fetchTasks();
   }, []);
 
+  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewTask((prevTask) => ({
@@ -205,6 +210,7 @@ function IGHAirdropTasks() {
     }));
   };
 
+  // Handle creating a new task
   const handleCreateTask = () => {
     setIsEditMode(false);
     setIsModalOpen(true);
@@ -213,12 +219,16 @@ function IGHAirdropTasks() {
       description: "",
       link: "",
       points: "",
-      proofPlaceholder: "",
+      proofPlaceholder: "", // Default value
       category: "Special",
-      logo: "", // Reset logo field
+      taskType: "",
+      telegramAction: "",
+      chatId: "",
+      logo: "",
     });
   };
 
+  // Handle editing an existing task
   const handleEditTask = (task) => {
     setIsEditMode(true);
     setCurrentTaskId(task._id);
@@ -227,60 +237,72 @@ function IGHAirdropTasks() {
       description: task.description,
       link: task.link,
       points: task.points,
-      proofPlaceholder: task.proofPlaceholder,
+      proofPlaceholder: task.proofPlaceholder , // Set default if empty
       category: task.category,
-      logo: task.logo || '',
+      taskType: task.taskType,
+      telegramAction: task.telegramAction,
+      chatId: task.chatId || "",
+      logo: task.logo || "",
     });
     setIsModalOpen(true);
   };
 
+  // Handle closing the modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
+  // Handle form submission (Create or Update)
   const handleSubmitTask = async (e) => {
     e.preventDefault();
 
-    if (isEditMode) {
-      // Update existing task
-      try {
+    // Format the task to ensure correct data types
+    const formattedTask = {
+      ...newTask,
+      points: Number(newTask.points), // Convert points to a number
+    };
+
+    try {
+      if (isEditMode) {
+        // Update existing task
         const response = await axios.put(
           `${process.env.REACT_APP_API_URL}/igh-airdrop-tasks/${currentTaskId}`,
-          newTask
+          formattedTask
         );
         setTasks(
-          tasks.map((task) =>
-            task._id === currentTaskId ? response.data : task
-          )
+          tasks.map((task) => (task._id === currentTaskId ? response.data : task))
         );
-      } catch (error) {
-        console.error("Error updating task:", error);
-      }
-    } else {
-      // Create new task
-      try {
+      } else {
+        // Create new task
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/igh-airdrop-tasks`,
-          newTask
+          formattedTask
         );
         setTasks([...tasks, response.data]);
-      } catch (error) {
-        console.error("Error creating task:", error);
+      }
+
+      setIsModalOpen(false);
+      setNewTask({
+        name: "",
+        description: "",
+        link: "",
+        points: "",
+        proofPlaceholder: "",
+        category: "Special",
+        taskType: "",
+        telegramAction: "",
+        chatId: "",
+        logo: "",
+      });
+    } catch (error) {
+      console.error("Error creating/updating task:", error);
+      if (error.response && error.response.data) {
+        console.error("Server response:", error.response.data);
       }
     }
-
-    setIsModalOpen(false);
-    setNewTask({
-      name: "",
-      description: "",
-      link: "",
-      points: "",
-      proofPlaceholder: "",
-      category: "Special",
-      logo: "", // Reset after submission
-    });
   };
 
+  // Handle deleting a task
   const handleDeleteTask = async (taskId) => {
     if (window.confirm("Are you sure you want to delete this task?")) {
       try {
@@ -308,7 +330,9 @@ function IGHAirdropTasks() {
             <Th>Link</Th>
             <Th>Points</Th>
             <Th>Category</Th>
-            <Th>Proof Placeholder</Th>
+            <Th>Task Type</Th>
+            <Th>Telegram Action</Th>
+            <Th>Telegram Chat ID</Th>
             <Th>Logo</Th>
             <Th>Actions</Th>
           </tr>
@@ -329,9 +353,19 @@ function IGHAirdropTasks() {
               </Td>
               <Td>{task.points}</Td>
               <Td>{task.category}</Td>
-              <Td>{task.proofPlaceholder}</Td>
+              <Td>{task.taskType}</Td>
+              <Td>{task.telegramAction || "N/A"}</Td>
+              <Td>{task.chatId || "N/A"}</Td>
               <Td>
-                {task.logo ? <img src={task.logo} alt="Logo" style={{ width: '50px', height: '50px' }} /> : 'No logo'}
+                {task.logo ? (
+                  <img
+                    src={task.logo}
+                    alt="Logo"
+                    style={{ width: "50px", height: "50px" }}
+                  />
+                ) : (
+                  "No logo"
+                )}
               </Td>
               <Td>
                 <Button onClick={() => handleEditTask(task)}>Edit</Button>
@@ -384,6 +418,14 @@ function IGHAirdropTasks() {
                 onChange={handleInputChange}
                 required
               />
+              <Label>Proof Placeholder</Label>
+              <Input
+                type="text"
+                name="proofPlaceholder"
+                value={newTask.proofPlaceholder}
+                onChange={handleInputChange}
+                required
+              />
               <Label>Category</Label>
               <Select
                 name="category"
@@ -395,16 +437,49 @@ function IGHAirdropTasks() {
                 <option value="Daily">Daily</option>
                 <option value="Lists">Lists</option>
                 <option value="Extra">Extra</option>
-
               </Select>
-              <Label>Proof Placeholder</Label>
-              <Input
-                type="text"
-                name="proofPlaceholder"
-                value={newTask.proofPlaceholder}
+
+              <Label>Task Type</Label>
+              <Select
+                name="taskType"
+                value={newTask.taskType}
                 onChange={handleInputChange}
                 required
-              />
+              >
+                <option value="telegram">Telegram</option>
+                <option value="youtube">YouTube</option>
+                <option value="twitter">Twitter</option>
+                <option value="facebook">Facebook</option>
+                <option value="tiktok">TikTok</option>
+                <option value="instagram">Instagram</option>
+                <option value="others">Others</option>
+              </Select>
+
+              {newTask.taskType === "telegram" && (
+                <>
+                  <Label>Telegram Action</Label>
+                  <Select
+                    name="telegramAction"
+                    value={newTask.telegramAction}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="join">Join Group/Channel</option>
+                    <option value="subscribe">Subscribe to Channel</option>
+                    <option value="send_message">Send Message to Group/Channel</option>
+                  </Select>
+
+                  <Label>Telegram Chat ID</Label>
+                  <Input
+                    type="text"
+                    name="chatId"
+                    value={newTask.chatId}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </>
+              )}
+
               <Label>Logo URL</Label>
               <Input
                 type="url"
