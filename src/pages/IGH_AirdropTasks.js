@@ -179,7 +179,7 @@ function IGHAirdropTasks() {
     points: "",
     proofPlaceholder: "", // Default placeholder value
     category: "Special",
-    taskType: "",
+    taskType: "others",
     telegramAction: "",
     chatId: "",
     logo: "",
@@ -221,7 +221,7 @@ function IGHAirdropTasks() {
       points: "",
       proofPlaceholder: "", // Default value
       category: "Special",
-      taskType: "",
+      taskType: "others",
       telegramAction: "",
       chatId: "",
       logo: "",
@@ -239,7 +239,7 @@ function IGHAirdropTasks() {
       points: task.points,
       proofPlaceholder: task.proofPlaceholder , // Set default if empty
       category: task.category,
-      taskType: task.taskType,
+      taskType: task.taskType || "others",
       telegramAction: task.telegramAction,
       chatId: task.chatId || "",
       logo: task.logo || "",
@@ -289,7 +289,7 @@ function IGHAirdropTasks() {
         points: "",
         proofPlaceholder: "",
         category: "Special",
-        taskType: "",
+        taskType: "others",
         telegramAction: "",
         chatId: "",
         logo: "",
