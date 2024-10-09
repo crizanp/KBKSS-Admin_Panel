@@ -177,15 +177,14 @@ function IGHAirdropTasks() {
     description: "",
     link: "",
     points: "",
-    proofPlaceholder: "", // Default placeholder value
+    proofPlaceholder: "Provide proof here",
     category: "Special",
-    taskType: "others",
-    telegramAction: "",
+    taskType: "telegram",
+    telegramAction: "join",
     chatId: "",
     logo: "",
   });
 
-  // Fetch tasks from the backend
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -201,7 +200,6 @@ function IGHAirdropTasks() {
     fetchTasks();
   }, []);
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewTask((prevTask) => ({
@@ -210,7 +208,6 @@ function IGHAirdropTasks() {
     }));
   };
 
-  // Handle creating a new task
   const handleCreateTask = () => {
     setIsEditMode(false);
     setIsModalOpen(true);
@@ -219,16 +216,15 @@ function IGHAirdropTasks() {
       description: "",
       link: "",
       points: "",
-      proofPlaceholder: "", // Default value
+      proofPlaceholder: "Provide proof here",
       category: "Special",
-      taskType: "others",
-      telegramAction: "",
+      taskType: "telegram",
+      telegramAction: "join",
       chatId: "",
       logo: "",
     });
   };
 
-  // Handle editing an existing task
   const handleEditTask = (task) => {
     setIsEditMode(true);
     setCurrentTaskId(task._id);
@@ -237,34 +233,29 @@ function IGHAirdropTasks() {
       description: task.description,
       link: task.link,
       points: task.points,
-      proofPlaceholder: task.proofPlaceholder , // Set default if empty
+      proofPlaceholder: task.proofPlaceholder || "Provide proof here",
       category: task.category,
-      taskType: task.taskType || "others",
-      telegramAction: task.telegramAction,
+      taskType: task.taskType,
+      telegramAction: task.telegramAction || "join",
       chatId: task.chatId || "",
       logo: task.logo || "",
     });
     setIsModalOpen(true);
   };
 
-  // Handle closing the modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
-  // Handle form submission (Create or Update)
   const handleSubmitTask = async (e) => {
     e.preventDefault();
-
-    // Format the task to ensure correct data types
     const formattedTask = {
       ...newTask,
-      points: Number(newTask.points), // Convert points to a number
+      points: Number(newTask.points),
     };
 
     try {
       if (isEditMode) {
-        // Update existing task
         const response = await axios.put(
           `${process.env.REACT_APP_API_URL}/igh-airdrop-tasks/${currentTaskId}`,
           formattedTask
@@ -273,7 +264,6 @@ function IGHAirdropTasks() {
           tasks.map((task) => (task._id === currentTaskId ? response.data : task))
         );
       } else {
-        // Create new task
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/igh-airdrop-tasks`,
           formattedTask
@@ -287,9 +277,9 @@ function IGHAirdropTasks() {
         description: "",
         link: "",
         points: "",
-        proofPlaceholder: "",
+        proofPlaceholder: "Provide proof here",
         category: "Special",
-        taskType: "others",
+        taskType: "telegram",
         telegramAction: "",
         chatId: "",
         logo: "",
@@ -302,7 +292,6 @@ function IGHAirdropTasks() {
     }
   };
 
-  // Handle deleting a task
   const handleDeleteTask = async (taskId) => {
     if (window.confirm("Are you sure you want to delete this task?")) {
       try {
