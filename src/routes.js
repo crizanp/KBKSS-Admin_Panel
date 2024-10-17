@@ -17,6 +17,7 @@ import AdminBackgroundManager from "./pages/AdminBackgroundManager";
 import AdminAvatarManager from "./pages/AdminAvatarManager";
 import FallbackImageManager from "./pages/FallbackImageManager";
 import LevelManagement from "./pages/LevelManagement";
+import WeeklyLeaderboard from "./pages/WeeklyLeaderboard";
 
 function AppRoutes() {
   return (
@@ -140,7 +141,14 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
-
+<Route
+        path="/weekly-leaderboard"
+        element={
+          <PrivateRoute>
+            <WeeklyLeaderboard />
+          </PrivateRoute>
+        }
+      />
       {/* Catch-all Route for Undefined Paths */}
       <Route path="*" element={<NotFound />} />
     </Routes>
