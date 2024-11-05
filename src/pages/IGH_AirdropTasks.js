@@ -440,7 +440,9 @@ function IGHAirdropTasks() {
                 <option value="twitter">Twitter</option>
                 <option value="facebook">Facebook</option>
                 <option value="tiktok">TikTok</option>
+                <option value="tonConnect">Ton Connect</option>
                 <option value="instagram">Instagram</option>
+
                 <option value="others">Others</option>
               </Select>
 
